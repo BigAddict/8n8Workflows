@@ -701,7 +701,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-2.0-flash",
+        "modelName": "models/gemini-2.0-flash-lite",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -721,6 +721,7 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-2.0-flash-lite",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -887,6 +888,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2025-09-21T07:32:13.000Z",
-  "versionId": "5f28a08b-71dc-4313-a7f0-00dbd6dbb461"
+  "updatedAt": "2025-10-13T06:57:32.000Z",
+  "versionId": "ecec7c8e-c5da-41ee-872a-41c8d7155e93"
 }

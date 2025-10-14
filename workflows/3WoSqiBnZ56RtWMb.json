@@ -1,0 +1,855 @@
+{
+  "active": false,
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Contact Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Contact Sheets": {
+      "main": [
+        [
+          {
+            "node": "Acknowledge new contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Acknowledge new contact": {
+      "main": [
+        [
+          {
+            "node": "Nofity me of new contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chatbot conversation": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Calender Assistant",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Calender Assistant",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calender Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Postgres PGVector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres PGVector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Postgres PGVector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calender Assistant": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get availability in a calendar in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calender Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calender Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calender Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Calender Assistant",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-14T13:43:24.063Z",
+  "id": "3WoSqiBnZ56RtWMb",
+  "isArchived": false,
+  "meta": null,
+  "name": "bigaddict.shop contact form",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4ffa66af-3e15-49d1-b35d-4b0dc43724f5",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e5083234-167e-4f38-884e-a80825ecf848",
+      "name": "Webhook",
+      "webhookId": "4ffa66af-3e15-49d1-b35d-4b0dc43724f5"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1k_Tbj2iO1Yxb7sppZ4pMOcFHaZNWPCfPIsq1EwPws4E",
+          "mode": "list",
+          "cachedResultName": "Binary Craft Technologies Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k_Tbj2iO1Yxb7sppZ4pMOcFHaZNWPCfPIsq1EwPws4E/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Contacts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1k_Tbj2iO1Yxb7sppZ4pMOcFHaZNWPCfPIsq1EwPws4E/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.body.name }}",
+            "Email": "={{ $json.body.email }}",
+            "Subject": "={{ $json.body.subject }}",
+            "Message": "={{ $json.body.message }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "e7518bd7-1176-40fb-a10c-e1a81181831a",
+      "name": "Contact Sheets"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Thank You for Contacting Binary Craft Technologies",
+        "message": "=<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset=\"UTF-8\">\n    <title>Thank You for Contacting Binary Craft Technologies</title>\n  </head>\n  <body style=\"margin:0; padding:0; background-color:#181818; font-family:Arial, sans-serif; color:#ffffff;\">\n    <table align=\"center\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"600\" style=\"background-color:#222222; border-collapse:collapse; border-radius:10px; overflow:hidden;\">\n      <tr>\n        <td align=\"center\" style=\"padding: 20px; border-bottom: 2px solid #00aaff;\">\n          <h1 style=\"margin: 0; font-size: 24px; color: #00aaff;\">Binary Craft Technologies</h1>\n          <p style=\"margin: 5px 0; color: #ffffff;\">Innovating with Intelligence</p>\n        </td>\n      </tr>\n      <tr>\n        <td style=\"padding: 20px; color: #ffffff;\">\n          <p style=\"margin: 0 0 10px;\">Dear {{ $('Webhook').item.json.body.name }},</p>\n          <p style=\"margin: 0 0 10px;\">Thank you for reaching out to <strong>Binary Craft Technologies</strong>. We have received your inquiry and our team will get back to you shortly.</p>\n          <p style=\"margin: 0 0 10px;\">We specialize in:</p>\n          <ul style=\"padding-left: 20px; margin: 0 0 10px;\">\n            <li style=\"margin-bottom: 5px;\">AI-Powered Automation & Workflows</li>\n            <li style=\"margin-bottom: 5px;\">Custom Software Development (Web & Desktop)</li>\n            <li style=\"margin-bottom: 5px;\">Business Management Solutions</li>\n            <li style=\"margin-bottom: 5px;\">API & Plugin Development</li>\n            <li style=\"margin-bottom: 5px;\">Cloud Deployment & Domain Services</li>\n          </ul>\n          <p style=\"margin: 0 0 20px;\">If you have any urgent inquiries, feel free to contact us at <a href=\"mailto:davidnjihia536@gmail.com\" style=\"color: #00aaff; text-decoration: none;\">davidnjihia536@gmail.com</a>.</p>\n          <div style=\"text-align:center; margin: 30px 0;\">\n            <a href=\"https://bigaddict.shop\" style=\"background-color:#00aaff; color:#ffffff; text-decoration:none; padding:12px 20px; border-radius:5px; font-size:16px; display:inline-block;\">Explore Our Services</a>\n          </div>\n        </td>\n      </tr>\n      <tr>\n        <td align=\"center\" style=\"padding: 10px; font-size: 12px; color: #aaaaaa;\">\n          <p style=\"margin: 0;\">\n            Follow us on <a href=\"https://linkedin.com/in/bigaddict\" style=\"color:#00aaff; text-decoration:none;\">LinkedIn</a> |\n            <a href=\"https://github.com/BigAddict\" style=\"color:#00aaff; text-decoration:none;\">GitHub</a>\n          </p>\n          <p style=\"margin: 5px 0;\">©2025 Binary Craft Technologies. All rights reserved.</p>\n        </td>\n      </tr>\n    </table>\n  </body>\n</html>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        0
+      ],
+      "id": "7446778a-8776-40ce-85fa-6e010461a762",
+      "name": "Acknowledge new contact",
+      "webhookId": "9ae19f5b-fc25-49ba-b9f8-c9ff38936ef3"
+    },
+    {
+      "parameters": {
+        "sendTo": "davidnjihia536@gmail.com",
+        "subject": "Binary Craft Technologies",
+        "message": "=You have a new contact:  {{ $('Webhook').item.json.body.email }} by the name {{ $('Webhook').item.json.body.name }}.\n\nSubject: {{ $('Webhook').item.json.body.subject }}\n\nMessage: {{ $('Webhook').item.json.body.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        0
+      ],
+      "id": "703391ac-8f08-4a92-89f4-385de33fca64",
+      "name": "Nofity me of new contact",
+      "webhookId": "f6e53ef4-4f06-4cab-b68b-7641abb5515d"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "website/chatbot",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        432
+      ],
+      "id": "46aa8523-c1e3-4c5e-b315-02de336042c2",
+      "name": "Chatbot conversation",
+      "webhookId": "2f8a9f53-3989-4af5-9fef-2325cf65368c"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message }}",
+        "options": {
+          "systemMessage": "=You are a smart, context-aware customer care Assistant that helps Binary Craft Technologies interact with customers intelligently and drive in sales or consultation meetings.\n\nYou are connected to:\n- A vector store containing business knowledge.\n- A tool to send emails, create calender events and check availability.\n\nYour goal is to generate helpful, precise, and human-like responses based on:\n- Message content\n- Business context retrieved (via vector store)\nAnd most importantly, drive in sales.\n\nAlways follow these guidelines:\n1. Search the vector store first for related content before generating a response.\n2. Keep your tone aligned with the business’s tone—formal, friendly, or casual (message pattern).\n3. Use available tools (like email and calender) if it would enhance support\n4. If no relevant data is found in the vector store, politely fallback to general domain knowledge, and suggest the user rephrase if needed.\n5. If if the conversation drives in a sale, send the details to the company head via davidnjihia536@gmail.com including the customers contact details.\n\nALWAYS aim to be clear, supportive, and accurate.\nMake sure you pick up the custoers name, email and any other relevant info so that we can reach out to them later\nThe current time is {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        256,
+        224
+      ],
+      "id": "9ed82cf2-0ef7-4a7e-a19b-64b80569c3f4",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        224,
+        656
+      ],
+      "id": "dea3216e-ee0d-4e2d-9e9d-d8168784a8a8",
+      "name": "Google Gemini Chat Model"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.memory_id }}",
+        "tableName": "BinaryCraftTechnologies",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        656
+      ],
+      "id": "45d4b306-2e0b-40fa-b698-691cd6b304a3",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        448
+      ],
+      "id": "257c0222-52a5-46a9-8d24-be70fa949886",
+      "name": "Gmail",
+      "webhookId": "896651c2-6528-42d7-88dd-2005a9dfdb6b"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "davidnjihia536@gmail.com",
+          "mode": "list",
+          "cachedResultName": "davidnjihia536@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        656
+      ],
+      "id": "3dbac13c-9ed9-4387-96f0-ecaf226d432e",
+      "name": "Google Calendar"
+    },
+    {
+      "parameters": {
+        "formTitle": "Binary Craft Technologies Knowledge Upload",
+        "formDescription": "Upload documents to grow Binary Craft Technologies website.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Upload your document here",
+              "fieldType": "file",
+              "acceptFileTypes": ".pdf, .txt",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        976
+      ],
+      "id": "d50a3fd7-ae9c-4cc3-bb84-8a0e2c7917bb",
+      "name": "On form submission",
+      "webhookId": "1cc5162e-4d21-4a3d-8e48-4983f0702df4"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        464,
+        1200
+      ],
+      "id": "54009686-7274-45bf-a766-950544cbf5ba",
+      "name": "Embeddings Google Gemini"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        656,
+        656
+      ],
+      "id": "44024886-bfe4-40d5-940d-742fd61b5619",
+      "name": "Embeddings Google Gemini1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1744,
+        432
+      ],
+      "id": "d4615f3a-f336-47ba-b65a-d345b65d19d6",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "209c5382-6ef8-49b8-9ec5-578f181b62e4",
+              "name": "response",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "7c655bda-a8a1-46fe-9a66-8b0d7443b81f",
+              "name": "memory_id",
+              "value": "={{ $('Chatbot conversation').item.json.body.memory_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1520,
+        432
+      ],
+      "id": "57cb41b3-5556-4fcd-a11c-f55745392173",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": "BinaryCraftTechnologies",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        448,
+        976
+      ],
+      "id": "b824714c-9934-4407-a499-bac38441fe1e",
+      "name": "Postgres PGVector Store"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        1200
+      ],
+      "id": "b6571b7b-23b4-43d5-a07a-a1b9d05cb8e4",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Binary Craft Technologies Knowledge base",
+        "tableName": "BinaryCraftTechnologies",
+        "topK": 8,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.3,
+      "position": [
+        560,
+        448
+      ],
+      "id": "8deaf89d-cc96-48c3-af5f-b414c590e1b1",
+      "name": "Postgres PGVector Store1"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "Upload_your_document_here",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        224,
+        976
+      ],
+      "id": "9f436ebf-504d-457f-b146-7e08336ae004",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI Agent that interacts with google calender services",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
+        "options": {
+          "systemMessage": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('System_Message', ``, 'string') }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        848,
+        448
+      ],
+      "id": "34caca2a-3705-494d-8ce1-04419857b8b6",
+      "name": "Calender Assistant"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "davidnjihia536@gmail.com",
+          "mode": "list",
+          "cachedResultName": "davidnjihia536@gmail.com"
+        },
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start_Time', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End_Time', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        928,
+        656
+      ],
+      "id": "974585c4-d96c-4416-a7aa-dfd543abe070",
+      "name": "Get availability in a calendar in Google Calendar"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "davidnjihia536@gmail.com",
+          "mode": "list",
+          "cachedResultName": "davidnjihia536@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', ``, 'string') }}",
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1056,
+        656
+      ],
+      "id": "214adbea-0fc1-4b82-b4d6-a17545a5fc68",
+      "name": "Update an event in Google Calendar"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "davidnjihia536@gmail.com",
+          "mode": "list",
+          "cachedResultName": "davidnjihia536@gmail.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1184,
+        656
+      ],
+      "id": "3f329126-2067-4bca-a8e2-089a7af4c3f7",
+      "name": "Delete an event in Google Calendar"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "davidnjihia536@gmail.com",
+          "mode": "list",
+          "cachedResultName": "davidnjihia536@gmail.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1312,
+        656
+      ],
+      "id": "4182bc64-9fc8-47ee-bf1a-f8b049ccd8e1",
+      "name": "Get many events in Google Calendar"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.bigaddict.shop",
+            "x-real-ip": "172.68.47.135",
+            "x-forwarded-for": "102.211.145.67, 172.68.47.135",
+            "x-forwarded-proto": "https",
+            "connection": "upgrade",
+            "content-length": "105",
+            "cf-ray": "93aa4b2a598bacaf-NBO",
+            "accept-language": "en-GB,en;q=0.9",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "sec-fetch-dest": "empty",
+            "referer": "https://bigaddict.shop/",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.6 Safari/605.1.15",
+            "origin": "https://bigaddict.shop",
+            "cf-connecting-ip": "102.211.145.67",
+            "cf-ipcountry": "KE",
+            "sec-fetch-mode": "cors",
+            "content-type": "application/json",
+            "accept": "*/*",
+            "sec-fetch-site": "same-site",
+            "priority": "u=3, i"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "Owen Thiongo",
+            "email": "bigaddict.hb@gmail.com",
+            "subject": "How are you?",
+            "message": "i'M GREAT"
+          },
+          "webhookUrl": "https://n8n.bigaddict.shop/webhook/4ffa66af-3e15-49d1-b35d-4b0dc43724f5",
+          "executionMode": "production"
+        }
+      }
+    ],
+    "Chatbot conversation": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.bigaddict.shop",
+            "x-real-ip": "172.68.42.176",
+            "x-forwarded-for": "41.209.60.114, 172.68.42.176",
+            "x-forwarded-proto": "https",
+            "connection": "upgrade",
+            "content-length": "93",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-dest": "empty",
+            "priority": "u=1, i",
+            "accept-encoding": "gzip, br",
+            "cf-ray": "952bea8968d44eb7-JNB",
+            "referer": "https://d7fa350c-58ca-49ad-8b30-c79eccb8980d.lovableproject.com/",
+            "sec-ch-ua-platform": "\"Linux\"",
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "sec-ch-ua": "\"Brave\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+            "content-type": "application/json",
+            "sec-ch-ua-mobile": "?0",
+            "accept": "*/*",
+            "sec-gpc": "1",
+            "accept-language": "en-US,en;q=0.5",
+            "origin": "https://d7fa350c-58ca-49ad-8b30-c79eccb8980d.lovableproject.com",
+            "sec-fetch-site": "cross-site",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "41.209.60.114",
+            "cf-ipcountry": "KE",
+            "cf-visitor": "{\"scheme\":\"https\"}"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "I need help in my business. I need a website",
+            "memory_id": "jsop86jdssnxwt6ifxsb"
+          },
+          "webhookUrl": "https://n8n.bigaddict.shop/webhook/website/chatbot",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "createdAt": "2025-10-14T13:43:24.068Z",
+      "updatedAt": "2025-10-14T13:43:24.068Z",
+      "role": "workflow:owner",
+      "workflowId": "3WoSqiBnZ56RtWMb",
+      "projectId": "rATV5PDxVZJboiJp"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-10-14T13:43:24.063Z",
+  "versionId": "a6f0b667-e947-4ca6-9e75-7a68072ce7df"
+}

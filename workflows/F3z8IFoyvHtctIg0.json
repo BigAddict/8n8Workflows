@@ -1216,8 +1216,8 @@
   },
   "shared": [
     {
-      "createdAt": "2025-04-03T20:50:44.994Z",
       "updatedAt": "2025-04-03T20:50:44.994Z",
+      "createdAt": "2025-04-03T20:50:44.994Z",
       "role": "workflow:owner",
       "workflowId": "F3z8IFoyvHtctIg0",
       "projectId": "jpKau5BZEX0mhCP5"
@@ -1226,12 +1226,12 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        12
+        22
       ]
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        10
+        22
       ]
     }
   },

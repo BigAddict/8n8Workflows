@@ -465,7 +465,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1,
       "position": [
-        552,
+        560,
         560
       ],
       "id": "faa4e800-6c7f-4409-9866-5f1fcd86f094",
@@ -506,7 +506,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.2,
       "position": [
-        680,
+        688,
         560
       ],
       "id": "55fd8d57-ab77-4ab3-b058-8e5943306442",
@@ -910,7 +910,7 @@
       "typeVersion": 4.5,
       "position": [
         -576,
-        264
+        272
       ],
       "id": "0b91c377-0155-4781-bc8f-ec780256ab55",
       "name": "Fetch all posts",
@@ -1174,6 +1174,7 @@
           "name": "Google Gemini(PaLM) Api account 4"
         }
       },
+      "disabled": true,
       "onError": "continueErrorOutput"
     },
     {
@@ -1226,17 +1227,17 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        0
+        12
       ]
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        22
+        10
       ]
     }
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2025-10-10T21:23:31.000Z",
-  "versionId": "7802cf38-3088-4062-9ef1-faed98cc5489"
+  "updatedAt": "2025-11-20T07:02:09.000Z",
+  "versionId": "74b90741-45b4-4872-8abf-82015e7b0247"
 }

@@ -1153,9 +1153,9 @@
         "resource": "image",
         "modelId": {
           "__rl": true,
-          "value": "models/gemini-2.0-flash-exp-image-generation",
+          "value": "models/gemini-2.5-flash-image",
           "mode": "list",
-          "cachedResultName": "models/gemini-2.0-flash-exp-image-generation"
+          "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
         },
         "prompt": "={{ $('Basic LLM Chain').item.json.output.image_json_prompt }}",
         "options": {}
@@ -1170,11 +1170,10 @@
       "name": "Generate an image",
       "credentials": {
         "googlePalmApi": {
-          "id": "mTb9C35Hdpl1dPkM",
-          "name": "Google Gemini(PaLM) Api account 4"
+          "id": "kSDjT64QAeHAQtTi",
+          "name": "Google Gemini(PaLM) Api account"
         }
       },
-      "disabled": true,
       "onError": "continueErrorOutput"
     },
     {
@@ -1227,17 +1226,17 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        0
+        10
       ]
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        22
+        10
       ]
     }
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2025-11-20T07:02:09.000Z",
-  "versionId": "74b90741-45b4-4872-8abf-82015e7b0247"
+  "updatedAt": "2025-11-22T06:07:08.000Z",
+  "versionId": "a9c24e6e-49a0-413a-a35c-5bdfd83cc263"
 }

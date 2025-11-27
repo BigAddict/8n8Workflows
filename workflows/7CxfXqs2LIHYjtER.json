@@ -1,0 +1,73 @@
+{
+  "active": true,
+  "connections": {},
+  "createdAt": "2025-11-27T19:19:39.850Z",
+  "id": "7CxfXqs2LIHYjtER",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Wozapauto Update Notifier",
+  "nodes": [
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "BigAddict",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "WozapAuto",
+          "mode": "list",
+          "cachedResultName": "WozapAuto",
+          "cachedResultUrl": "https://github.com/BigAddict/WozapAuto"
+        },
+        "events": [
+          "push"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c5061972-3026-4fa7-a9f6-ecc1c0edca82",
+      "name": "Github Trigger",
+      "webhookId": "6270585e-4b30-444d-9b75-71abc53fe2d5",
+      "credentials": {
+        "githubApi": {
+          "id": "sn9haglgJ5Wh9eDZ",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-11-27T19:19:39.855Z",
+      "createdAt": "2025-11-27T19:19:39.855Z",
+      "role": "workflow:owner",
+      "workflowId": "7CxfXqs2LIHYjtER",
+      "projectId": "jpKau5BZEX0mhCP5"
+    }
+  ],
+  "staticData": {
+    "node:Github Trigger": {
+      "webhookId": 583317079,
+      "webhookEvents": [
+        "push"
+      ]
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-11-27T19:20:26.000Z",
+  "versionId": "873a7a44-b5f5-4458-a237-629c69673a28"
+}

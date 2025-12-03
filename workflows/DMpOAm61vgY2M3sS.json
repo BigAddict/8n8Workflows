@@ -1,5 +1,846 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-25T17:35:57.965Z",
+    "createdAt": "2025-11-25T17:35:57.965Z",
+    "versionId": "ecec7c8e-c5da-41ee-872a-41c8d7155e93",
+    "workflowId": "DMpOAm61vgY2M3sS",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "sms/finance",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -2864,
+          64
+        ],
+        "id": "4e9440ec-1416-4a1a-9065-6816e23329b4",
+        "name": "Webhook",
+        "webhookId": "abd8a4f8-1a98-4fec-ac19-07390739ce36"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"istransaction\": \"True\",\n  \"direction\": \"sent\"\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          -2064,
+          192
+        ],
+        "id": "884344ee-2403-4618-a34d-22ef638a6aa8",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "0ed39814-b7f1-4cae-81db-85f8e756537c",
+                "leftValue": "={{ $json.output.istransaction }}",
+                "rightValue": "True",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -1840,
+          -32
+        ],
+        "id": "93bc720c-eca9-4d02-bf63-865790f729cf",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "51b15928-8e0e-49cd-b05a-3a72d64230b4",
+                "name": "body.user_id",
+                "value": "={{ $json.body.user_id }}",
+                "type": "string"
+              },
+              {
+                "id": "9331481b-b073-4081-b506-fe1611d6f841",
+                "name": "body.message",
+                "value": "={{ $json.body.message }}",
+                "type": "string"
+              },
+              {
+                "id": "53b9b00a-472f-41f6-b5b1-d1c194a1d28b",
+                "name": "body.from",
+                "value": "={{ $json.body.from }}",
+                "type": "string"
+              },
+              {
+                "id": "033f51ec-4790-46ff-b722-e35093c49202",
+                "name": "body.time",
+                "value": "={{ $json.body.time }}",
+                "type": "string"
+              },
+              {
+                "id": "851df70c-21ed-4df7-b4c0-a1fb6706db45",
+                "name": "body.formatted_message",
+                "value": "={{ $json.body.formatted_message }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -2640,
+          -32
+        ],
+        "id": "97847298-b22f-4262-ab21-5b135c150551",
+        "name": "Fetch required details from webhook"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $('Fetch required details from webhook').item.json.body.message }}",
+          "hasOutputParser": true,
+          "messages": {
+            "messageValues": [
+              {
+                "message": "You are a Decision making assistant. You are provided with an sms content and your task is to decide whether the sms is a money transaction or not. If it's a transation you find out if the money was sent or recieved.\nCancelled transactions should be ruled out as not transaction\n\nHere is an example of the output required.\nExample 1:\n{\n  \"istransaction\": \"True\",\n  \"direction\": \"money in\"\n}\nExample 2:\n{\n  \"istransaction\": \"True\",\n  \"direction\": \"money out\"\n}\nExample 3:\n{\n  \"istransaction\": \"False\",\n  \"direction\": \"\"\n}"
+              }
+            ]
+          },
+          "batching": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.7,
+        "position": [
+          -2192,
+          -32
+        ],
+        "id": "1ecabcb6-e942-4a43-9567-180940507b64",
+        "name": "Find out if it a transaction and it's direction"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3603e184-1781-42f3-9bc7-c9b42ef9b11e",
+                "name": "user_id",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.user_id }}",
+                "type": "string"
+              },
+              {
+                "id": "938b2618-c1dd-4946-a9da-0aacd9bae156",
+                "name": "from",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.from }}",
+                "type": "string"
+              },
+              {
+                "id": "e3a57638-8e9e-40b5-83c5-5adb2dbad32d",
+                "name": "time",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.time }}",
+                "type": "string"
+              },
+              {
+                "id": "62d7306f-c903-4032-8c0a-e4da650e7a2c",
+                "name": "direction",
+                "value": "={{ $('Find out if it a transaction and it\\'s direction').item.json.output.direction }}",
+                "type": "string"
+              },
+              {
+                "id": "06a963a7-a49a-4a72-88fe-fc3eead12ede",
+                "name": "amount",
+                "value": "={{ $json.output.amount }}",
+                "type": "number"
+              },
+              {
+                "id": "bc36ab40-2b89-4c26-a7d9-3e933795dd3c",
+                "name": "balance",
+                "value": "={{ $json.output.balance }}",
+                "type": "number"
+              },
+              {
+                "id": "e20601b3-2ecd-464e-91a8-17c26bbe27c1",
+                "name": "description",
+                "value": "={{ $json.output.description }}",
+                "type": "string"
+              },
+              {
+                "id": "4707f91b-617d-4ce2-a543-6feeb2680bc3",
+                "name": "raw_sms_id",
+                "value": "={{ $('Raw SMS Data').item.json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1040,
+          -192
+        ],
+        "id": "f8589978-1d6c-481b-8e4f-310d8b33ef5d",
+        "name": "Format the final data"
+      },
+      {
+        "parameters": {
+          "text": "={{ $('Fetch required details from webhook').item.json.body.message }}",
+          "attributes": {
+            "attributes": [
+              {
+                "name": "amount",
+                "type": "number",
+                "description": "The amount sent or spent.",
+                "required": true
+              },
+              {
+                "name": "balance",
+                "type": "number",
+                "description": "The new balance is indicated, if not default to -1",
+                "required": true
+              },
+              {
+                "name": "description",
+                "description": "Describe the cash out from the account",
+                "required": true
+              },
+              {
+                "name": "fee",
+                "description": "Transaction cost or transaction fee",
+                "required": true
+              },
+              {
+                "name": "account",
+                "description": "The account used. If not provided use `Not provided` as default",
+                "required": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+        "typeVersion": 1.2,
+        "position": [
+          -1392,
+          -288
+        ],
+        "id": "a281f537-d1fc-4576-b2c1-f3b6ebd82267",
+        "name": "Extract transaction details"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.output.direction }}",
+                      "rightValue": "money out",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "0bd74ddd-cc6c-42d6-b217-00fb1ed10dd4"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "money out"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "6fa3d122-2717-411f-8623-1de274c970a2",
+                      "leftValue": "={{ $json.output.direction }}",
+                      "rightValue": "money in",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "money in"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -1616,
+          -32
+        ],
+        "id": "df688dca-8c01-4646-bb1a-7d7dbe8c7b77",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "3603e184-1781-42f3-9bc7-c9b42ef9b11e",
+                "name": "user_id",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.user_id }}",
+                "type": "string"
+              },
+              {
+                "id": "938b2618-c1dd-4946-a9da-0aacd9bae156",
+                "name": "from",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.from }}",
+                "type": "string"
+              },
+              {
+                "id": "e3a57638-8e9e-40b5-83c5-5adb2dbad32d",
+                "name": "time",
+                "value": "={{ $('Fetch required details from webhook').item.json.body.time }}",
+                "type": "string"
+              },
+              {
+                "id": "62d7306f-c903-4032-8c0a-e4da650e7a2c",
+                "name": "direction",
+                "value": "={{ $('Find out if it a transaction and it\\'s direction').item.json.output.direction }}",
+                "type": "string"
+              },
+              {
+                "id": "06a963a7-a49a-4a72-88fe-fc3eead12ede",
+                "name": "amount",
+                "value": "={{ $json.output.amount }}",
+                "type": "number"
+              },
+              {
+                "id": "bc36ab40-2b89-4c26-a7d9-3e933795dd3c",
+                "name": "balance",
+                "value": "={{ $json.output.balance }}",
+                "type": "number"
+              },
+              {
+                "id": "fd87c72d-0158-4e94-92c0-9a41837bc32d",
+                "name": "id",
+                "value": "={{ $('Raw SMS Data').item.json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "c65dd877-1851-4c19-994c-a6cffc185c82",
+                "name": "description",
+                "value": "={{ $json.output.description }}",
+                "type": "string"
+              },
+              {
+                "id": "cdc6fca6-86bf-44fc-b451-327c1027eb20",
+                "name": "raw_sms_id",
+                "value": "={{ $('Raw SMS Data').item.json.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1040,
+          112
+        ],
+        "id": "9867262c-558e-4c57-90d7-072b173091c1",
+        "name": "Format the final data1"
+      },
+      {
+        "parameters": {
+          "text": "={{ $('Fetch required details from webhook').item.json.body.message }}",
+          "attributes": {
+            "attributes": [
+              {
+                "name": "amount",
+                "type": "number",
+                "description": "The amount recieved.",
+                "required": true
+              },
+              {
+                "name": "balance",
+                "type": "number",
+                "description": "The new balance is indicated, if not default to -1",
+                "required": true
+              },
+              {
+                "name": "description",
+                "description": "Describe the cash in to the account",
+                "required": true
+              },
+              {
+                "name": "account",
+                "description": "The account used. If not provided use `Not provided` as default",
+                "required": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+        "typeVersion": 1.2,
+        "position": [
+          -1392,
+          112
+        ],
+        "id": "6ffd35cb-771f-4ce3-9b57-725dbfe50686",
+        "name": "Extract transaction details1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://ywkwtwffsnqlrhmshbxe.supabase.co/functions/v1/receive-processed-transaction",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "user_id",
+                "value": "={{ $json.user_id }}"
+              },
+              {
+                "name": "from",
+                "value": "={{ $json.from }}"
+              },
+              {
+                "name": "time",
+                "value": "={{ $json.time }}"
+              },
+              {
+                "name": "direction",
+                "value": "={{ $json.direction }}"
+              },
+              {
+                "name": "amount",
+                "value": "={{ $json.amount }}"
+              },
+              {
+                "name": "balance",
+                "value": "={{ $json.balance }}"
+              },
+              {
+                "name": "description",
+                "value": "={{ $json.description }}"
+              },
+              {
+                "name": "raw_sms_id",
+                "value": "={{ $json.raw_sms_id }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -816,
+          -32
+        ],
+        "id": "f8d7a485-8eba-451b-a709-384e5e4aee5b",
+        "name": "Processed SMS Data"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://ywkwtwffsnqlrhmshbxe.supabase.co/functions/v1/receive-raw-sms",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "user_id",
+                "value": "={{ $json.body.user_id }}"
+              },
+              {
+                "name": "message",
+                "value": "={{ $json.body.message }}"
+              },
+              {
+                "name": "from",
+                "value": "={{ $json.body.from }}"
+              },
+              {
+                "name": "time",
+                "value": "={{ $json.body.time }}"
+              },
+              {
+                "name": "formatted_message",
+                "value": "={{ $json.body.formatted_message }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -2416,
+          -32
+        ],
+        "id": "72674d84-b71c-4731-b5e7-378db660aee9",
+        "name": "Raw SMS Data"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.0-flash-lite",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -2192,
+          192
+        ],
+        "id": "bcbfaa28-d390-4306-aea4-d8b47e03f795",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "kSDjT64QAeHAQtTi",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.0-flash-lite",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1328,
+          -64
+        ],
+        "id": "aace905b-ea81-418a-95d7-46754ff7a349",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://ywkwtwffsnqlrhmshbxe.supabase.co/functions/v1/receive-error",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "user_id"
+              },
+              {
+                "name": "source"
+              },
+              {
+                "name": "error_type"
+              },
+              {
+                "name": "error_message"
+              },
+              {
+                "name": "payload"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -3088,
+          -512
+        ],
+        "id": "24025a83-cbce-4845-bcb2-11576f467618",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "sms/finance2",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -3088,
+          -128
+        ],
+        "id": "f0d737bf-d527-4937-b713-a116a269c830",
+        "name": "Webhook1",
+        "webhookId": "abd8a4f8-1a98-4fec-ac19-07390739ce36"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "51b15928-8e0e-49cd-b05a-3a72d64230b4",
+                "name": "body.user_id",
+                "value": "={{ $json.body.user_id }}",
+                "type": "string"
+              },
+              {
+                "id": "9331481b-b073-4081-b506-fe1611d6f841",
+                "name": "body.message",
+                "value": "={{ $json.body.message }}",
+                "type": "string"
+              },
+              {
+                "id": "53b9b00a-472f-41f6-b5b1-d1c194a1d28b",
+                "name": "body.from",
+                "value": "={{ $json.body.from }}",
+                "type": "string"
+              },
+              {
+                "id": "033f51ec-4790-46ff-b722-e35093c49202",
+                "name": "body.time",
+                "value": "={{ $json.body.time.toDateTime('ms') }}",
+                "type": "string"
+              },
+              {
+                "id": "851df70c-21ed-4df7-b4c0-a1fb6706db45",
+                "name": "body.formatted_message",
+                "value": "={{ $json.body.formatted_message }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -2864,
+          -128
+        ],
+        "id": "2e2c9b46-9697-49fe-a188-e1dcaab45b9d",
+        "name": "Fetch required details from webhook1"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Fetch required details from webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Find out if it a transaction and it's direction",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Fetch required details from webhook": {
+        "main": [
+          [
+            {
+              "node": "Raw SMS Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Find out if it a transaction and it's direction": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format the final data": {
+        "main": [
+          [
+            {
+              "node": "Processed SMS Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract transaction details": {
+        "main": [
+          [
+            {
+              "node": "Format the final data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Extract transaction details",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract transaction details1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format the final data1": {
+        "main": [
+          [
+            {
+              "node": "Processed SMS Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract transaction details1": {
+        "main": [
+          [
+            {
+              "node": "Format the final data1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Find out if it a transaction and it's direction",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Extract transaction details",
+              "type": "ai_languageModel",
+              "index": 0
+            },
+            {
+              "node": "Extract transaction details1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Raw SMS Data": {
+        "main": [
+          [
+            {
+              "node": "Find out if it a transaction and it's direction",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook1": {
+        "main": [
+          [
+            {
+              "node": "Fetch required details from webhook1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch required details from webhook1": {
+        "main": [
+          [
+            {
+              "node": "Fetch required details from webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "ecec7c8e-c5da-41ee-872a-41c8d7155e93",
   "connections": {
     "Webhook": {
       "main": [

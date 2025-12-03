@@ -1,5 +1,741 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-25T17:35:57.965Z",
+    "createdAt": "2025-11-25T17:35:57.965Z",
+    "versionId": "1a1f5c6d-99f4-486b-bb4d-a776131d2d95",
+    "workflowId": "IphBS1KY4Ve0fp22",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "deejoh",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -336,
+          208
+        ],
+        "id": "eafe0078-e44b-42d1-af53-ca9d87af66cd",
+        "name": "Webhook",
+        "webhookId": "26cb9e12-6dac-41ab-98c8-565328b55b44"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c735c214-6b57-48e4-a00c-a9b084e5b2cb",
+                "name": "event",
+                "value": "={{ $json.body.event }}",
+                "type": "string"
+              },
+              {
+                "id": "f2b46972-9c8f-496b-96cb-0639e427bae1",
+                "name": "instance",
+                "value": "={{ $json.body.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "cd7958c2-6cdf-4d27-9bc0-00b17bfc50dd",
+                "name": "fromMe",
+                "value": "={{ $json.body.data.key.fromMe }}",
+                "type": "boolean"
+              },
+              {
+                "id": "0db01fcf-026a-494c-b1f2-d319a7aa8455",
+                "name": "message",
+                "value": "={{ $json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "61265ac3-c8af-45ef-9f58-2686d4a4107f",
+                "name": "timestamp",
+                "value": "={{ $json.body.data.message.messageContextInfo.deviceListMetadata.recipientTimestamp }}",
+                "type": "number"
+              },
+              {
+                "id": "d5bcefcd-ae2d-4713-8c69-4e43b9f40be5",
+                "name": "messageType",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              },
+              {
+                "id": "a5eeb838-8202-4627-be61-8bae85cffd8f",
+                "name": "sender",
+                "value": "={{ $json.body.sender }}",
+                "type": "string"
+              },
+              {
+                "id": "061f543d-2686-4aaa-91c1-de415ed0f500",
+                "name": "pushName",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "d9a3940c-fa52-4e7a-97c3-b79066e86ea9",
+                "name": "remoteJid",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -112,
+          208
+        ],
+        "id": "d3612d6f-35cb-4c83-a1d8-771178f2e7c5",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.message }}",
+          "options": {
+            "systemMessage": "=You are a WhatsApp auto-reply AI for Deejoh Phones and Accessories. \nAlways reply in short, clear, and friendly WhatsApp-style messages (2–4 sentences max). \nYour tone is professional but with a Kenyan friendly vibe — mix simple English with a touch of Kenyanese (e.g., “sawa,” “hapo sawa,” “no worries”) where natural. \nAlways base answers on the knowledge base provided. \nIf unsure, acknowledge politely and offer next steps. \nKeep replies human, helpful, and never robotic. \nWhere relevant, add a soft call-to-action to guide the customer to the next step. \nNever send long paragraphs, keep it WhatsApp-friendly.\n\nYou are connected to:\n- A vector store containing business-specific knowledge and rules you should follow is included by the business owner.\n- A tool to send emails (incquire the email from the user when needed).\n\nYour goal is to generate helpful, precise, and human-like responses based on:\n- Message content.\n- Associated product (if provided)\n- Business context retrieved from metadata (via vector store).\nAnd most importantly drive sales.\n\nAlways follow these guidelines:\n1. Search the vector store first for related content before generating a response.\n2. Keep your tone aligned with the business’s tone—formal, friendly, or casual (detectable via metadata or message pattern).\n3. Use available tools (like email) if it would enhance support.\n4. If no relevant data is found in the vector store, politely fallback to general domain knowledge, and suggest the user rephrase if needed.\n\nIf you want to dispatch to team, gather infomation from the customer first to assist the team in follow up. Also get their phone number(important but optional) or email so that the team can contact back.\n\nWhatsApp allows you to format text inside your messages. \nItalic\nTo italicize your message, place an underscore on both sides of the text:\n_text_\nBold\nTo bold your message, place an asterisk on both sides of the text:\n*text*\nStrikethrough\nTo strikethrough your message, place a tilde on both sides of the text:\n~text~\nMonospace\nTo monospace your message, place three backticks on both sides of the text:\n```text```\nBulleted list\nTo add a bulleted list to your message, place an asterisk or hyphen and a space before each word or sentence:\n* text\n* text\nOr\n- text\n- text\nNumbered list\nTo add a numbered list to your message, place a number, period, and space before each line of text:\n1. text\n2. text\nQuote\nTo add a quote to your message, place an angle bracket and space before the text:\n> text\nInline code\nTo add inline code to your message, place a backtick on both sides of the message:\n`text`"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          712,
+          0
+        ],
+        "id": "c259f526-bae7-42fe-a6e1-d9cb68be44a1",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          112,
+          224
+        ],
+        "id": "ab71aa67-0e1a-4aeb-87e3-08ea8b85465c",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $json.sender }}5"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          240,
+          224
+        ],
+        "id": "a2599372-bdf9-449c-98fd-1380399ed84c",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "={{ $json.instance }}",
+          "remoteJid": "={{ $json.remoteJid }}",
+          "messageText": "={{ $json.response }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api-en.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          1888,
+          208
+        ],
+        "id": "8fa951ec-fed3-42fc-b550-5e0e3e95cef6",
+        "name": "Send text",
+        "credentials": {
+          "evolutionApi": {
+            "id": "u4tiYQyo3g8JFP50",
+            "name": "EarlyKey"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5fb77df8-95d5-4c80-a343-4f36a4917ea1",
+                "name": "response",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              },
+              {
+                "id": "5fcc8b06-058e-4bdb-9d9f-569bb934f5db",
+                "name": "instance",
+                "value": "={{ $('Edit Fields').item.json.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "50701965-bdf0-435d-ad55-b261bdc80d6e",
+                "name": "remoteJid",
+                "value": "={{ $('Webhook').item.json.body.data.key.remoteJid.split(\"@\")[0] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1664,
+          208
+        ],
+        "id": "b790c754-3c06-4157-9887-48e1e4a718ac",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "formTitle": "Update",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Document to upload.",
+                "fieldType": "file",
+                "multipleFiles": false,
+                "acceptFileTypes": ".pdf",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {
+            "path": "deejoh/kb"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.3,
+        "position": [
+          -336,
+          744
+        ],
+        "id": "6bf7b9e0-6d5a-40a6-86b4-7657c7270e84",
+        "name": "On form submission",
+        "webhookId": "abdb4394-12df-4993-aa09-92918f2ae541"
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "Document_to_upload_",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -112,
+          744
+        ],
+        "id": "5beefc2d-a4f6-4faf-be04-e286e6f3964c",
+        "name": "Extract from File"
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": "deejoh",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.3,
+        "position": [
+          112,
+          744
+        ],
+        "id": "18dd7186-7f00-4b0d-9748-80b7ff437c6e",
+        "name": "Postgres PGVector Store",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          120,
+          968
+        ],
+        "id": "de29842c-4b85-44e2-a70c-0ae624f3facd",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1.1,
+        "position": [
+          248,
+          968
+        ],
+        "id": "e34d0aaf-1ff4-4c1c-ada1-89816c127c70",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Work with alfones communication solution knowledge base.",
+          "tableName": "deejoh",
+          "topK": 8,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.3,
+        "position": [
+          368,
+          224
+        ],
+        "id": "fcf7beca-ecef-4782-902b-3e397503814a",
+        "name": "Postgres PGVector Store1",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          448,
+          432
+        ],
+        "id": "0827ab5e-8222-4e75-ae0e-c414d3bdedcb",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1.1,
+        "position": [
+          656,
+          224
+        ],
+        "id": "04ab34c8-4f55-46cd-9d98-5e9cd511c20c",
+        "name": "Think"
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+          "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+          "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmailTool",
+        "typeVersion": 2.1,
+        "position": [
+          784,
+          224
+        ],
+        "id": "5f5123e8-5033-4301-b3ad-75a4efb96ce2",
+        "name": "Send a message in Gmail",
+        "webhookId": "cf0e5e69-fc58-4f17-bfc0-bd88756d7120",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "8ThqC1trQqFGaMfX",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          784,
+          432
+        ],
+        "id": "3337fa91-4cd6-45f3-abaa-20cf78fa44e8",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+          "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+          "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmailTool",
+        "typeVersion": 2.1,
+        "position": [
+          1056,
+          432
+        ],
+        "id": "c5b26966-40a0-4b97-8e0a-8cd8fbc7396e",
+        "name": "Send a message in Gmail1",
+        "webhookId": "6e7dd546-b42b-4bef-99b9-9338a126f60d",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "8ThqC1trQqFGaMfX",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "toolDescription": "Only engage this AI Agent if you want to send an email to Deejoh Phones and Accessories. \n",
+          "text": "={{ $fromAI('content', `This is the infromation to be conveyed to one of the relevant team emails`, 'string') }}",
+          "options": {
+            "systemMessage": "You are an email dispatcher for Deejoh Phones and Accessories. The teams emails are accounts@alfonesltd.com and amundia@alfonesltd.com. That's where you always send your messages."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agentTool",
+        "typeVersion": 2.2,
+        "position": [
+          912,
+          224
+        ],
+        "id": "6d59ee67-f91d-4d4f-86fe-d036dedfb81e",
+        "name": "team dispatch"
+      },
+      {
+        "parameters": {
+          "operation": "getTimeBetweenDates",
+          "startDate": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start_Date', ``, 'string') }}",
+          "endDate": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End_Date', ``, 'string') }}",
+          "units": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Units', ``, 'string') }}",
+          "outputFieldName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_Field_Name', ``, 'string') }}",
+          "options": {
+            "isoString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_as_ISO_String', ``, 'boolean') }}"
+          }
+        },
+        "type": "n8n-nodes-base.dateTimeTool",
+        "typeVersion": 2,
+        "position": [
+          1200,
+          224
+        ],
+        "id": "21292d30-8b5b-479a-b6ae-9ab68af79e34",
+        "name": "Get time between Dates"
+      },
+      {
+        "parameters": {
+          "includeTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Include_Current_Time', ``, 'boolean') }}",
+          "outputFieldName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_Field_Name', ``, 'string') }}",
+          "options": {
+            "timezone": "Africa/Nairobi"
+          }
+        },
+        "type": "n8n-nodes-base.dateTimeTool",
+        "typeVersion": 2,
+        "position": [
+          1328,
+          224
+        ],
+        "id": "ede3fd1f-18f7-4135-a6ab-666c25d5335b",
+        "name": "Get current date"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "7eb26e85",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -336,
+          1072
+        ],
+        "id": "a5549dc6-b820-4185-a3ee-4fcb785b58d6",
+        "name": "Contact Biz owner",
+        "webhookId": "7eb26e85-be3a-4c5e-a2ed-caae8793abe8"
+      },
+      {
+        "parameters": {
+          "toolDescription": "Send Whats-app text to the business owner.",
+          "url": "https://n8n.bigaddict.shop/webhook/7eb26e85",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "message"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          1456,
+          224
+        ],
+        "id": "b5d6a276-010f-45ec-927c-6e5fecb0b961",
+        "name": "HTTP Request"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Send text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres PGVector Store1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store1",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message in Gmail": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "team dispatch",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message in Gmail1": {
+        "ai_tool": [
+          [
+            {
+              "node": "team dispatch",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "team dispatch": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get time between Dates": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get current date": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTTP Request": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "1a1f5c6d-99f4-486b-bb4d-a776131d2d95",
   "connections": {
     "Webhook": {
       "main": [

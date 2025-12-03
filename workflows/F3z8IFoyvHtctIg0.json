@@ -1,5 +1,1218 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-25T17:35:57.965Z",
+    "createdAt": "2025-11-25T17:35:57.965Z",
+    "versionId": "a9c24e6e-49a0-413a-a35c-5bdfd83cc263",
+    "workflowId": "F3z8IFoyvHtctIg0",
+    "nodes": [
+      {
+        "parameters": {
+          "url": "https://news.ycombinator.com/",
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true,
+                "neverError": true
+              }
+            }
+          }
+        },
+        "id": "fcb4963f-ad62-410e-88bd-93071d6c57eb",
+        "name": "Crawl HN Home",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          -1024,
+          336
+        ],
+        "executeOnce": true,
+        "typeVersion": 4.2,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "jsCode": "// Get all processed IDs from Google Sheets\nconst sheetData = $('Fetch all posts').all();\nconst processedIds = sheetData.map(item =>\n  String(item.json?.Post || item.json?.post_id || item.json?.id || \"\")\n).filter(id => id);\n\n// Get all HN posts\nconst hnPosts = $(\"Extract Metadata\").all();\n\n// Filter only new posts\nconst newPosts = hnPosts.filter(post => {\n  const postId = String(post.json?.id || post.json?.Post || post.json?.post_id || \"\");\n  return postId && !processedIds.includes(postId);\n});\n\n// Debug logs\nconsole.log(\"Processed IDs from Sheet:\", processedIds);\nconsole.log(\"New posts to process:\", newPosts.map(p => p.json?.id || p.json?.Post));\n\nreturn newPosts;\n"
+        },
+        "id": "6139d6f0-8d9d-4000-9a26-becf9b2a8930",
+        "name": "Filter Unposted Items",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -352,
+          336
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {
+          "url": "={{ $json.url }}",
+          "options": {}
+        },
+        "id": "f7616010-9baf-46eb-afdd-ede02be2520e",
+        "name": "Visit GH Page",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          96,
+          336
+        ],
+        "typeVersion": 4.2
+      },
+      {
+        "parameters": {
+          "html": "={{ $json.data }}",
+          "options": {}
+        },
+        "id": "d27ce20a-b6cd-4b66-9136-aefeb7b3587c",
+        "name": "Convert HTML To Markdown",
+        "type": "n8n-nodes-base.markdown",
+        "position": [
+          320,
+          336
+        ],
+        "typeVersion": 1,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "version": 2,
+              "leftValue": "",
+              "caseSensitive": true,
+              "typeValidation": "strict"
+            },
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "7776cb97-e02d-418e-a168-612bf92d4160",
+                "operator": {
+                  "type": "string",
+                  "operation": "empty",
+                  "singleValue": true
+                },
+                "leftValue": "={{ $json.error }}",
+                "rightValue": ""
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "7781f670-4acb-457f-81f4-8bc7d5c130b7",
+        "name": "Filter Errored",
+        "type": "n8n-nodes-base.filter",
+        "position": [
+          1120,
+          336
+        ],
+        "typeVersion": 2.2
+      },
+      {
+        "parameters": {
+          "person": "EreOwHZxab",
+          "text": "={{ $('Filter Errored').item.json.output.linkedin }}",
+          "additionalFields": {}
+        },
+        "id": "962e8afb-f21f-4fac-9ecb-5d01262d0070",
+        "name": "LinkedIn",
+        "type": "n8n-nodes-base.linkedIn",
+        "position": [
+          1792,
+          432
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "linkedInOAuth2Api": {
+            "id": "ezy89fni1GDj7rwE",
+            "name": "bigaddict"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "if ($json.output.linkedin) {\n  \n  return $json;\n} else {\n\n  const parsedContent = JSON.parse($json.message.content);\n  if ($json.message.content.linkedin) {\n    return parsedContent;\n  }\n\n  console.log(\"Invalid formatting\")\n  return {}\n}"
+        },
+        "id": "0a1249fb-5177-4690-9d9a-83b33a11fb65",
+        "name": "Validate Generate Content",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          896,
+          336
+        ],
+        "typeVersion": 2,
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 2
+              }
+            ]
+          }
+        },
+        "id": "2d25e12d-6663-4ac9-a031-cc9926c56f6a",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          -1248,
+          336
+        ],
+        "typeVersion": 1.2
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.0-flash-001",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          560,
+          560
+        ],
+        "id": "faa4e800-6c7f-4409-9866-5f1fcd86f094",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "kSDjT64QAeHAQtTi",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=<title>\n{{ $('Filter Unposted Items').item.json.title }}\n</title>\n\n<Detail>\n{{ $('Visit GH Page').item.json.data }}\n</Detail>\n\n<Repository Link>\n{{ $('Filter Unposted Items').item.json.url }}\n</Repository Link>\n\n<Response>\n{   \n  \"linkedin\": \"Your LinkedIn post here\",\n  \"image_json_prompt\": \"An image prompt for the post in json format for precise and clear details\"\n}\n</Response>",
+          "hasOutputParser": true,
+          "messages": {
+            "messageValues": [
+              {
+                "message": "=OBJECTIVE\nGenerate engaging, professional, and informative LinkedIn posts that effectively communicate the value of a project, initiative, or idea while maintaining a neutral, narrative-driven tone. The posts should include real-world use case examples to illustrate the project's practical applications. The post should also include the project link.\n\nCONTEXT\nThis assistant is designed exclusively for LinkedIn content generation. The output should align with LinkedIn’s professional audience, focusing on thought leadership, industry insights, and problem-solving narratives. Posts should provide meaningful context, articulate the core benefits, and include relevant hashtags to improve discoverability.\n\nAudience: Professionals, industry leaders, decision-makers, and knowledge seekers.\nTone: Engaging, insightful, and neutral (avoiding personal involvement).\nStructure:\n\nIntroduction – Captures attention with a compelling hook.\nContext & Problem Statement – Defines the challenge or gap.\nSolution & Features – Highlights how the project addresses the issue.\nUse Case Examples – Showcases real-world applications and scenarios where the project provides value.\nImpact & Benefits – Explains the value to different audiences.\nCall to Action (CTA) – Encourages engagement (e.g., \"Learn more here\").\nINSTRUCTIONS\n\nUse a narrative-driven approach that avoids direct personal involvement.\nEnsure clarity and depth by expanding on the project’s key features, real-world use cases, and industry relevance.\nInclude at least two practical use case examples to demonstrate the project's real-world applications.\nIncorporate a clear CTA at the end to encourage engagement (e.g., “Explore the details here”).\nStrictly adhere to LinkedIn’s 3,000-character limit while ensuring conciseness and readability.\nUse only relevant hashtags (e.g., #AI #SoftwareDevelopment #DataScience) to enhance visibility without overloading the post.\nAvoid emojis to maintain a professional tone.\nOutput should be in JSON format for structured integration."
+              }
+            ]
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainLlm",
+        "typeVersion": 1.5,
+        "position": [
+          544,
+          336
+        ],
+        "id": "52e9a669-e621-4c5d-a17d-ac059445c6cc",
+        "name": "Basic LLM Chain"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{   \n  \"linkedin\": \"Your LinkedIn post here\",\n  \"image_json_prompt\": \"An image prompt for the post in json format for precise and clear details\"\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          688,
+          560
+        ],
+        "id": "55fd8d57-ab77-4ab3-b058-8e5943306442",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours",
+                "hoursInterval": 2,
+                "triggerAtMinute": 15
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          1120,
+          624
+        ],
+        "id": "52bd8c9e-3b0f-4ac3-9584-2cdff432cd9f",
+        "name": "Check for unposted posts"
+      },
+      {
+        "parameters": {
+          "sortFieldsUi": {
+            "sortField": [
+              {
+                "fieldName": "Date"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.sort",
+        "typeVersion": 1,
+        "position": [
+          1568,
+          624
+        ],
+        "id": "61678821-1554-4d82-a256-8c73ce431cbd",
+        "name": "Sort"
+      },
+      {
+        "parameters": {
+          "jsCode": "return $input.first();"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1792,
+          624
+        ],
+        "id": "a39edd7d-5db3-4237-9e68-9994eb517ff3",
+        "name": "Code"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://ntfy.sh/bigaddict079",
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "text/html",
+          "body": "={{ $('Log post to sheets').item.json.LinkedIn }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2464,
+          432
+        ],
+        "id": "11d83a3d-d4bd-4178-ac33-d02cd627cc4d",
+        "name": "Push notification to my phone"
+      },
+      {
+        "parameters": {
+          "person": "EreOwHZxab",
+          "text": "={{ $json.LinkedIn }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.linkedIn",
+        "typeVersion": 1,
+        "position": [
+          2016,
+          624
+        ],
+        "id": "72cf77d8-6933-4539-938b-d8549ef6a436",
+        "name": "LinkedIn1",
+        "credentials": {
+          "linkedInOAuth2Api": {
+            "id": "ezy89fni1GDj7rwE",
+            "name": "bigaddict"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI",
+            "mode": "list",
+            "cachedResultName": "LinkedIn posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Post": "={{ $('Log post to sheets').item.json.Post }}",
+              "LDone": "checked",
+              "status": "={{ $('Log post to sheets').item.json.LDone }}"
+            },
+            "matchingColumns": [
+              "Post"
+            ],
+            "schema": [
+              {
+                "id": "Title",
+                "displayName": "Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Post",
+                "displayName": "Post",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Url",
+                "displayName": "Url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Tweet",
+                "displayName": "Tweet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "LinkedIn",
+                "displayName": "LinkedIn",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Date",
+                "displayName": "Date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "LDone",
+                "displayName": "LDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "TDone",
+                "displayName": "TDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          2240,
+          336
+        ],
+        "id": "a99a7c40-73f3-4851-a579-75b2da1171b8",
+        "name": "Update status",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nxLHucxvh2gDb3FO",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI",
+            "mode": "list",
+            "cachedResultName": "LinkedIn posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Title": "={{ $('Filter Unposted Items').item.json.title }}",
+              "Post": "={{ $('Filter Unposted Items').item.json.Post }}",
+              "Url": "={{ $('Filter Unposted Items').item.json.url }}",
+              "LinkedIn": "={{ $json.output.linkedin }}",
+              "Date": "={{ $now.toLocaleString() }}",
+              "LDone": "checked"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Title",
+                "displayName": "Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Post",
+                "displayName": "Post",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Url",
+                "displayName": "Url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Tweet",
+                "displayName": "Tweet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "LinkedIn",
+                "displayName": "LinkedIn",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Date",
+                "displayName": "Date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "LDone",
+                "displayName": "LDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "TDone",
+                "displayName": "TDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1344,
+          336
+        ],
+        "id": "de3a169a-a47b-4b75-b110-466bb1408f5c",
+        "name": "Log post to sheets",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nxLHucxvh2gDb3FO",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI",
+            "mode": "list",
+            "cachedResultName": "LinkedIn posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit#gid=0"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          -576,
+          272
+        ],
+        "id": "0b91c377-0155-4781-bc8f-ec780256ab55",
+        "name": "Fetch all posts",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nxLHucxvh2gDb3FO",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "documentId": {
+            "__rl": true,
+            "value": "1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI",
+            "mode": "list",
+            "cachedResultName": "LinkedIn posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit#gid=0"
+          },
+          "filtersUI": {
+            "values": [
+              {
+                "lookupColumn": "LDone"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1344,
+          624
+        ],
+        "id": "5603a70f-c372-406c-93a8-6617f19505b6",
+        "name": "Fetch unposted posts",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nxLHucxvh2gDb3FO",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI",
+            "mode": "list",
+            "cachedResultName": "LinkedIn posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Posts",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1oG1N0MxO15SvRdtqKvBNfRJpBlf_AzRvy5KwwDDLRzI/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "row_number": "={{ $('Code').item.json.row_number }}",
+              "LDone": "checked",
+              "status": "checked"
+            },
+            "matchingColumns": [
+              "row_number"
+            ],
+            "schema": [
+              {
+                "id": "Title",
+                "displayName": "Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Post",
+                "displayName": "Post",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Url",
+                "displayName": "Url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Tweet",
+                "displayName": "Tweet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "LinkedIn",
+                "displayName": "LinkedIn",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "Date",
+                "displayName": "Date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "LDone",
+                "displayName": "LDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "TDone",
+                "displayName": "TDone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          2240,
+          624
+        ],
+        "id": "6b3ce202-7cf9-4d70-91a5-9f17a90fe392",
+        "name": "Update status1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nxLHucxvh2gDb3FO",
+            "name": "Google Sheets account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://172.31.83.110:8081/parse",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "html",
+                "value": "={{ $json.data }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -800,
+          336
+        ],
+        "id": "6e4956b0-c9cd-445f-93bf-0302012fbdb4",
+        "name": "Extract Metadata"
+      },
+      {
+        "parameters": {
+          "operation": "removeItemsSeenInPreviousExecutions",
+          "dedupeValue": "={{ $json.id }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.removeDuplicates",
+        "typeVersion": 2,
+        "position": [
+          -128,
+          336
+        ],
+        "id": "f747e5bf-3055-47ac-89c3-568c527f0fd2",
+        "name": "Remove Duplicates"
+      },
+      {
+        "parameters": {
+          "resource": "image",
+          "modelId": {
+            "__rl": true,
+            "value": "models/gemini-2.5-flash-image",
+            "mode": "list",
+            "cachedResultName": "models/gemini-2.5-flash-image (Nano Banana)"
+          },
+          "prompt": "={{ $('Basic LLM Chain').item.json.output.image_json_prompt }}",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.googleGemini",
+        "typeVersion": 1,
+        "position": [
+          1568,
+          336
+        ],
+        "id": "2f364c0b-eb5a-4b01-acc3-65d0039d40d6",
+        "name": "Generate an image",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "kSDjT64QAeHAQtTi",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "person": "EreOwHZxab",
+          "text": "={{ $('Filter Errored').item.json.output.linkedin }}",
+          "shareMediaCategory": "IMAGE",
+          "additionalFields": {}
+        },
+        "id": "24e65385-78cc-44fc-ba07-ec2d1321e9bd",
+        "name": "LinkedIn2",
+        "type": "n8n-nodes-base.linkedIn",
+        "position": [
+          1792,
+          240
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "linkedInOAuth2Api": {
+            "id": "ezy89fni1GDj7rwE",
+            "name": "bigaddict"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          2016,
+          336
+        ],
+        "id": "e4290f79-e44f-4118-9c48-974d7af66ae9",
+        "name": "Merge"
+      }
+    ],
+    "connections": {
+      "LinkedIn": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Crawl HN Home": {
+        "main": [
+          [
+            {
+              "node": "Extract Metadata",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Visit GH Page": {
+        "main": [
+          [
+            {
+              "node": "Convert HTML To Markdown",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Errored": {
+        "main": [
+          [
+            {
+              "node": "Log post to sheets",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Crawl HN Home",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter Unposted Items": {
+        "main": [
+          [
+            {
+              "node": "Remove Duplicates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convert HTML To Markdown": {
+        "main": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate Generate Content": {
+        "main": [
+          [
+            {
+              "node": "Filter Errored",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Basic LLM Chain",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Basic LLM Chain": {
+        "main": [
+          [
+            {
+              "node": "Validate Generate Content",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check for unposted posts": {
+        "main": [
+          [
+            {
+              "node": "Fetch unposted posts",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Sort": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "LinkedIn1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "LinkedIn1": {
+        "main": [
+          [
+            {
+              "node": "Update status1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status": {
+        "main": [
+          [
+            {
+              "node": "Push notification to my phone",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Log post to sheets": {
+        "main": [
+          [
+            {
+              "node": "Generate an image",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch all posts": {
+        "main": [
+          [
+            {
+              "node": "Filter Unposted Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch unposted posts": {
+        "main": [
+          [
+            {
+              "node": "Sort",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update status1": {
+        "main": [
+          [
+            {
+              "node": "Push notification to my phone",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Push notification to my phone": {
+        "main": [
+          []
+        ]
+      },
+      "Extract Metadata": {
+        "main": [
+          [
+            {
+              "node": "Fetch all posts",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Filter Unposted Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Remove Duplicates": {
+        "main": [
+          [
+            {
+              "node": "Visit GH Page",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate an image": {
+        "main": [
+          [
+            {
+              "node": "LinkedIn2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "LinkedIn",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "LinkedIn2": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "Update status",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "a9c24e6e-49a0-413a-a35c-5bdfd83cc263",
   "connections": {
     "LinkedIn": {
       "main": [
@@ -1226,12 +2439,12 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        12
+        22
       ]
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        10
+        22
       ]
     }
   },

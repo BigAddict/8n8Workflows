@@ -1,0 +1,169 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Request Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request Data": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-12-03T16:35:49.162Z",
+  "id": "Hx2nLoerP90xEnCk",
+  "isArchived": false,
+  "meta": null,
+  "name": "Crypto",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        16
+      ],
+      "id": "9bd12d71-bd7b-4e3e-8b51-76218bfeffab",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "OK-ACCESS-KEY",
+              "value": "aae263bf-e47b-4a2f-815d-70092e5bb5e7"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        768,
+        0
+      ],
+      "id": "08857123-9b2b-4d1d-80b3-a26fb8206d39",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6f32f8e2-f7bf-4b10-a0fe-2b4c53cacec3",
+              "name": "OK-ACCESS-KEY",
+              "value": "aae263bf-e47b-4a2f-815d-70092e5bb5e7",
+              "type": "string"
+            },
+            {
+              "id": "206c19d2-63cd-437d-aeb5-b44ea28115b9",
+              "name": "OK-ACCESS-PASSPHRASE",
+              "value": "uwB19SXrsA3gukb^m2g2",
+              "type": "string"
+            },
+            {
+              "id": "0f573cec-1b73-4e5e-a394-fdd5dcbba941",
+              "name": "OK-ACCESS-TIMESTAMP",
+              "value": "={{$now.toUTC().toString()}}",
+              "type": "string"
+            },
+            {
+              "id": "6ea248c6-e0ad-44cb-8316-30efa08ff96c",
+              "name": "OK-ACCESS-SIGN",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        560,
+        0
+      ],
+      "id": "88db6697-0f83-4607-bc5b-90d21268198b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "722d6625-f0a9-48f2-9583-e842d653ad05",
+              "name": "cryptoAmount",
+              "value": "10",
+              "type": "string"
+            },
+            {
+              "id": "9cfe0c00-b152-4a9b-9514-f8edb6861f14",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -96,
+        16
+      ],
+      "id": "016941d9-40fc-4c5c-92be-bb7c61d3cee6",
+      "name": "Request Data"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-12-03T16:35:49.169Z",
+      "createdAt": "2025-12-03T16:35:49.169Z",
+      "role": "workflow:owner",
+      "workflowId": "Hx2nLoerP90xEnCk",
+      "projectId": "jpKau5BZEX0mhCP5"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-12-03T17:01:24.000Z",
+  "versionId": "74353890-6f84-4414-bbb3-934eb0904c5c"
+}

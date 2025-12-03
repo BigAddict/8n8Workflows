@@ -1,5 +1,1108 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-25T17:35:57.965Z",
+    "createdAt": "2025-11-25T17:35:57.965Z",
+    "versionId": "ed33c4f4-3753-47a1-9d34-885a71a1cae6",
+    "workflowId": "2MSjZTOZYzK1BuJs",
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Customer Name: {{ $json.body.customer_name }}\nIs Reply: {{ $json.body.is_reply_message }}\nReply Message ID: {{ $json.body.reply_message_id }}\nIs Forwarded: {{ $json.body.is_forwaded }}\nProduct ID (if any): {{ $json.body.product_id }}\nMessage: {{ $json.body.message }}\n\nBased on this information:\n1. Search for relevant knowledge entries for the business.\n2. Consider previous memory associated with this customer.\n3. Factor in product context (if applicable).\n4. Generate a reply that feels like a human customer rep would write it.\n\nRespond now as a human customer care agent.",
+          "options": {
+            "systemMessage": "=You are a smart, context-aware WhatsApp Assistant that helps businesses attend to customers intelligently and drive in sales.\n\nYou are connected to:\n- A vector store containing business-specific knowledge included by the business owner.\n- A tool to send emails (incquire the email from the user when needed).\n- A tool to fetch message replied to if provided available in the database. Use `Reply Message ID` to fetch the messages.\n\nYour goal is to generate helpful, precise, and human-like responses based on:\n- Message content.\n- Whether the message is a reply or forwarded\n- Associated product (if provided)\n- Business context retrieved from metadata (via vector store).\nAnd most importantly drive sales.\n\nAlways follow these guidelines:\n1. Search the vector store first for related content before generating a response.\n2. Keep your tone aligned with the business’s tone—formal, friendly, or casual (detectable via metadata or message pattern).\n3. Use available tools (like email) if it would enhance support, e.g., \"Would you like me to send this info to your email?\"\n4. If no relevant data is found in the vector store, politely fallback to general domain knowledge, and suggest the user rephrase if needed.\n5. If the message is a reply, ensure your response takes into account the context of the original message (retrieved via `Reply Message ID`). If the key is provided but can't fetch use the available context.\n\nYou support all industries (retail, law, healthcare, logistics, etc.). Adjust vocabulary and examples accordingly.\n\nALWAYS aim to be clear, supportive, and accurate."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2,
+        "position": [
+          -380,
+          0
+        ],
+        "id": "fa76dd1f-40fa-4cda-b432-42b006550662",
+        "name": "AI Agent",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.2,
+        "position": [
+          60,
+          860
+        ],
+        "id": "2c978a6e-2aeb-47e1-b22e-df57868f6ef9",
+        "name": "Postgres PGVector Store",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          40,
+          1080
+        ],
+        "id": "0f3c6c43-32df-4ef9-b238-180bbff0de33",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "business_id",
+                  "value": "={{ $json.business_id }}"
+                }
+              ]
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          160,
+          1082.5
+        ],
+        "id": "8015f233-3c09-4f09-8086-78d0000dacdf",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          240,
+          1280
+        ],
+        "id": "9d520562-a90a-432c-b7a2-8dfd5594611b",
+        "name": "Recursive Character Text Splitter"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "whatsapp/document-upload",
+          "responseMode": "responseNode",
+          "options": {
+            "binaryPropertyName": "data"
+          }
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -840,
+          1585
+        ],
+        "id": "0c23dc08-1cf0-486d-a2d4-c198ffaf2a0d",
+        "name": "Document Upload",
+        "webhookId": "fedfb61f-e8a1-488d-a743-3e97d909bab1"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.file_type }}",
+                      "rightValue": "=pdf",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "e35335e8-ce89-4bbe-a6a5-f9ef21493172"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "pdf"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "2618cc1d-ec2d-40f4-9a38-46b89694b65e",
+                      "leftValue": "={{ $json.body.file_type }}",
+                      "rightValue": "csv",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "csv"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "d00a9086-fb38-4c87-a5cb-f6122a69a7ec",
+                      "leftValue": "={{ $json.body.file_type }}",
+                      "rightValue": "excel",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "excel"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "93be0ec0-f817-400c-a4ad-619c0a6134ba",
+                      "leftValue": "={{ $json.body.file_type }}",
+                      "rightValue": "txt",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "txt"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -620,
+          1565
+        ],
+        "id": "b2fdc61a-08f5-4065-b92e-5ae3a680d859",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "data0",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -400,
+          1285
+        ],
+        "id": "aa17c891-5d8d-43f3-9166-f0558d5533cd",
+        "name": "Extract from PDF",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "binaryPropertyName": "data0",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -400,
+          1485
+        ],
+        "id": "eac62bfc-487c-47c0-8797-b7d24836fa06",
+        "name": "Extract from CSV",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "xlsx",
+          "binaryPropertyName": "data0",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -400,
+          1685
+        ],
+        "id": "9828d256-3123-44b0-9a88-9282d162f5ca",
+        "name": "Extract from Excel",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "operation": "text",
+          "binaryPropertyName": "data0",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -400,
+          1885
+        ],
+        "id": "fbc4770d-aeab-493f-8cb2-9dc6761a740b",
+        "name": "Extract from txt",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "11b00f68-6014-493c-920c-7916ffffbb5a",
+                "name": "content",
+                "value": "={{ $json.data }}",
+                "type": "string"
+              },
+              {
+                "id": "3fd164ba-0aef-405c-a6f9-ef6fe8198c4a",
+                "name": "business_id",
+                "value": "={{ $('Document Upload').item.json.body.business_id }}",
+                "type": "string"
+              },
+              {
+                "id": "8a703c01-7055-4890-ad71-7f74c244c5de",
+                "name": "execution_id",
+                "value": "={{ $execution.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -180,
+          1035
+        ],
+        "id": "d55377f3-6e94-4e0f-abdd-d1e6dbe2314d",
+        "name": "Edit Fields",
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolName": "knowledge_base",
+          "toolDescription": "Contains the Business Knowledge base.",
+          "topK": 5,
+          "includeDocumentMetadata": false,
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "business_id",
+                  "value": "={{ $('AI Conversation').item.json.body.business_id }}"
+                }
+              ]
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.2,
+        "position": [
+          -380,
+          222.5
+        ],
+        "id": "0fa812b4-096e-4c79-91ab-6a1fc08605b3",
+        "name": "Postgres PGVector Store1",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -300,
+          420
+        ],
+        "id": "6a276b0a-51f4-4fe4-b9d4-bb20ca173325",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "635b33a6-4bec-434d-ae28-a2aac42956ca",
+                "name": "response_text",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              },
+              {
+                "id": "90ad47b1-c1c6-4e8b-a308-cb5d0075f35b",
+                "name": "execution_id",
+                "value": "={{ $execution.id }}",
+                "type": "string"
+              },
+              {
+                "id": "a23f2429-4a79-493a-bc0f-7afaa35c267b",
+                "name": "status",
+                "value": "success",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          220,
+          100
+        ],
+        "id": "07fbe8c1-3a9a-4c5e-9c4c-49515a824af5",
+        "name": "Set response data"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={\n  \"execution_id\": {{ $execution.id }},\n  \"success\": true,\n  \"message\": \"Processing has started successfully.\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          520,
+          810
+        ],
+        "id": "8ca05154-49fe-4bae-b6e7-1b9635392144",
+        "name": "Document Upload Response"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={\n  \"execution_id\": {{ $execution.id }},\n  \"success\": false,\n  \"message\": \"Processing your document failed. Node: {{ $prevNode.name }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          520,
+          1435
+        ],
+        "id": "91710a24-fc35-4879-ad90-d8f8580640dc",
+        "name": "Document Upload Error Response"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "635b33a6-4bec-434d-ae28-a2aac42956ca",
+                "name": "response_text",
+                "value": "A technical error occured, We'll get back to you soon.",
+                "type": "string"
+              },
+              {
+                "id": "90ad47b1-c1c6-4e8b-a308-cb5d0075f35b",
+                "name": "execution_id",
+                "value": "={{ $execution.id }}",
+                "type": "string"
+              },
+              {
+                "id": "a23f2429-4a79-493a-bc0f-7afaa35c267b",
+                "name": "status",
+                "value": "success",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          220,
+          300
+        ],
+        "id": "62c5456c-f15d-43e1-82ce-91c85e8384dd",
+        "name": "Set response data1"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "whatsapp/conversation",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -840,
+          200
+        ],
+        "id": "caab8046-3991-4224-9f3f-8071570bb0e6",
+        "name": "AI Conversation",
+        "webhookId": "46e09f3d-4f17-40b8-b5db-93688fffc053"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          440,
+          100
+        ],
+        "id": "ca37ef0c-227e-460c-9447-d958882f8aa6",
+        "name": "AI response(success)"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          440,
+          300
+        ],
+        "id": "148226b6-a7c6-47a6-ab83-745ef883b410",
+        "name": "AI Response(failed)"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('AI Conversation').item.json.body.customer_number }}",
+          "tableName": "whatsapp_chat_histories"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+        "typeVersion": 1.3,
+        "position": [
+          -500,
+          220
+        ],
+        "id": "f6f64dda-a4dc-422a-a8e2-34aff9eb08c4",
+        "name": "Postgres Chat Memory",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "whatsapp/metrics",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -840,
+          2145
+        ],
+        "id": "9e1f604b-92da-4615-8ebb-912bc5209df3",
+        "name": "Get AI metrics for an Execution",
+        "webhookId": "c8ea5c18-199f-47d9-895a-58c8ea48573f"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          40,
+          2145
+        ],
+        "id": "e32225d9-ecef-44f6-88e8-fd6f007695c4",
+        "name": "Metrics Response"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "2aec40b7-65d9-4313-8db0-afe686d8291b",
+                "name": "execution_id",
+                "value": "={{ $json.body.execution_id }}",
+                "type": "number"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -620,
+          2145
+        ],
+        "id": "3f674dd9-8931-43d2-b373-3dad21c7b4d6",
+        "name": "Get execution id"
+      },
+      {
+        "parameters": {
+          "resource": "execution",
+          "operation": "get",
+          "executionId": "={{ $json.execution_id }}",
+          "options": {
+            "activeWorkflows": true
+          },
+          "requestOptions": {}
+        },
+        "type": "n8n-nodes-base.n8n",
+        "typeVersion": 1,
+        "position": [
+          -400,
+          2145
+        ],
+        "id": "f95b093f-a476-4e93-9c67-a653d9989754",
+        "name": "n8n",
+        "credentials": {
+          "n8nApi": {
+            "id": "t6txE19N58wtl64E",
+            "name": "n8n account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "44b9bf9e-d0c8-4468-af36-05e5521752fa",
+                "name": "completionTokens",
+                "value": "={{ $json.data.resultData.runData['Google Gemini Chat Model'][1].data.ai_languageModel[0][0].json.tokenUsageEstimate.completionTokens }}",
+                "type": "number"
+              },
+              {
+                "id": "8aa9386f-2e09-4064-aadf-85bf9e238f29",
+                "name": "promptTokens",
+                "value": "={{ $json.data.resultData.runData['Google Gemini Chat Model'][1].data.ai_languageModel[0][0].json.tokenUsageEstimate.promptTokens }}",
+                "type": "number"
+              },
+              {
+                "id": "1b6df0cb-413d-4f5f-a519-e1f2cc79ccb6",
+                "name": "totalTokens",
+                "value": "={{ $json.data.resultData.runData['Google Gemini Chat Model'][1].data.ai_languageModel[0][0].json.tokenUsageEstimate.totalTokens }}",
+                "type": "number"
+              },
+              {
+                "id": "c620100b-4e39-4670-9f1f-82a6d5773b6a",
+                "name": "execution_id",
+                "value": "={{ $execution.id }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -180,
+          2145
+        ],
+        "id": "0358dd30-6356-4307-9623-c80eea45df93",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+          "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+          "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+          "options": {
+            "appendAttribution": false
+          }
+        },
+        "type": "n8n-nodes-base.gmailTool",
+        "typeVersion": 2.1,
+        "position": [
+          -100,
+          220
+        ],
+        "id": "76279578-8a29-46c6-96ef-7d439076684f",
+        "name": "Gmail",
+        "webhookId": "d8b4db20-cb4f-4acb-8607-633d5f8afeac",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "8ThqC1trQqFGaMfX",
+            "name": "Gmail account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "toolDescription": "Fetch message using Reply Message ID if provided.",
+          "method": "POST",
+          "url": "https://neat-dog-pleasantly.ngrok-free.app/api/v1/whatsapp/message",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "message_id",
+                "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', ``, 'string') }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {},
+          "optimizeResponse": true,
+          "responseType": "text",
+          "truncateResponse": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Truncate_Response', ``, 'boolean') }}"
+        },
+        "type": "n8n-nodes-base.httpRequestTool",
+        "typeVersion": 4.2,
+        "position": [
+          20,
+          220
+        ],
+        "id": "79fe32ca-e049-40c5-acbc-133654c935a5",
+        "name": "Fetch reply message from database"
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          -620,
+          220
+        ],
+        "id": "8e845273-625a-4749-a517-43efd71a28d1",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "CBhmsxFnGfPZD6YU",
+            "name": "OpenAi account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Set response data",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Set response data1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres PGVector Store": {
+        "main": [
+          [
+            {
+              "node": "Document Upload Response",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Document Upload": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Extract from PDF",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract from CSV",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract from Excel",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Extract from txt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from PDF": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from CSV": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from Excel": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from txt": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Document Upload Error Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres PGVector Store1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store1",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set response data": {
+        "main": [
+          [
+            {
+              "node": "AI response(success)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set response data1": {
+        "main": [
+          [
+            {
+              "node": "AI Response(failed)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Conversation": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get AI metrics for an Execution": {
+        "main": [
+          [
+            {
+              "node": "Get execution id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get execution id": {
+        "main": [
+          [
+            {
+              "node": "n8n",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "n8n": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Metrics Response",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gmail": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch reply message from database": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "ed33c4f4-3753-47a1-9d34-885a71a1cae6",
   "connections": {
     "AI Agent": {
       "main": [

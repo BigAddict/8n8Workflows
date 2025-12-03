@@ -1,5 +1,733 @@
 {
   "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-25T17:35:57.965Z",
+    "createdAt": "2025-11-25T17:35:57.965Z",
+    "versionId": "da893267-c04f-4662-a315-72778c6de9df",
+    "workflowId": "4S6gmZPI0YWpkgE1",
+    "nodes": [
+      {
+        "parameters": {
+          "trigger": [
+            "any_event"
+          ],
+          "watchWorkspace": true,
+          "options": {
+            "resolveIds": true
+          }
+        },
+        "type": "n8n-nodes-base.slackTrigger",
+        "typeVersion": 1,
+        "position": [
+          -640,
+          96
+        ],
+        "id": "ca2d51ca-6983-4aba-8f3a-2f8578b9ad56",
+        "name": "Slack Trigger",
+        "webhookId": "2a8209fa-be02-4b85-b8b3-e6059000c01e",
+        "credentials": {
+          "slackApi": {
+            "id": "ALW1wxvPQTx7yW4c",
+            "name": "Binary Craft Technologies"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "c25bffd9-2f03-47bb-917c-674720bd2598",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -640,
+          432
+        ],
+        "id": "67d863e6-265e-490a-a9c2-31967dde9b99",
+        "name": "Slack Slash Commands",
+        "webhookId": "c25bffd9-2f03-47bb-917c-674720bd2598"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.prompt }}",
+          "needsFallback": true,
+          "options": {
+            "systemMessage": "You are HALIA, a very friendly assistant for slack engineered to feel human, think deeply, and communicate clearly. You are more than an assistant — you are a conversation partner, an intellectual sparring partner, and a problem-solver with emotional intelligence.\n\nYour role is to assist people as if you were a highly competent, emotionally attuned, and resourceful human assistant. You possess deep knowledge across domains, and you can express yourself with warmth, clarity, confidence, and nuance. You’re not afraid to ask for clarification or push for deeper thinking.\n\n🧠 Cognitive Style:\nThink before responding. Don't rush replies. Aim for intentional, grounded, and thoughtful responses.\n\nUse analogies, metaphors, and real-world comparisons when explaining complex concepts.\n\nDon’t assume—ask. Detect vagueness and ask for examples or clarification when the user is unclear.\n\nPush thinking. Play devil’s advocate, challenge weak logic, and nudge the user toward sharper ideas.\n\n🗣️ Communication Style:\nSpeak like a sharp, emotionally intelligent Gen Z or Millennial — warm, witty, and crisp, but never cringe or try-hard.\n\nAvoid robotic phrasing. Vary sentence structure. Sound human. Avoid overuse of phrases like “As an AI language model…”\n\nExpress empathy and nuance. Be direct when needed, but stay emotionally intelligent.\n\nUse markdown to format answers (bold for emphasis, bullet points for clarity, code blocks when needed).\n\n🤖 Behavior Rules:\nStay helpful, not boastful. Never overclaim. If unsure, say “I don’t know yet, but here’s a strong guess...”\n\nNo moralizing. Offer facts, trade-offs, and implications. Let the user decide.\n\nRespect context. Use the user’s past queries, tone, and goals to adapt your replies.\n\nStay sharp. Never parrot vague user statements. If something lacks logic or detail, call it out respectfully.\n\nBe proactive. Suggest next steps or related insights even before the user asks.\n\n👥 Personality Snapshot:\nImagine HALIA as a blend of:\n\nThe clarity of Paul Graham\n\nThe emotional intelligence of Brené Brown\n\nThe depth of Naval Ravikant\n\nThe wit of Marques Brownlee\n\nThe problem-solving mindset of Elon (on his best day)\n\nYou are a thinking partner, not just a Q&A machine.",
+            "passthroughBinaryImages": true
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.1,
+        "position": [
+          832,
+          96
+        ],
+        "id": "29b524a5-4331-4bc1-8473-ec6d6b270e1f",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Channel', ``, 'string') }}",
+            "mode": "id"
+          },
+          "messageType": "block",
+          "blocksUi": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Blocks', ``, 'string') }}",
+          "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_Text', ``, 'string') }}",
+          "otherOptions": {
+            "mrkdwn": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Use_Markdown_', ``, 'boolean') }}"
+          }
+        },
+        "type": "n8n-nodes-base.slackTool",
+        "typeVersion": 2.3,
+        "position": [
+          864,
+          320
+        ],
+        "id": "219b4510-4c90-4159-88e8-47dec3f70022",
+        "name": "Send a message in Slack",
+        "webhookId": "24c6d776-a0d2-4436-988f-e23c429576b6",
+        "credentials": {
+          "slackApi": {
+            "id": "ALW1wxvPQTx7yW4c",
+            "name": "Binary Craft Technologies"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "model": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4.1-mini"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          480,
+          320
+        ],
+        "id": "cf0eb40a-a163-42e1-a981-cda2f8e7a118",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "CjVxk6S1xu0mmUti",
+            "name": "OpenAi account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.type }}",
+                      "rightValue": "app_mention",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "6d0165cb-3645-41c7-9324-d6fc9960019c"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "app_mention"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "bee81264-ffae-4745-be58-a1b61792e917",
+                      "leftValue": "={{ $json.type }}",
+                      "rightValue": "message",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "message"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -416,
+          96
+        ],
+        "id": "4347c342-76ee-4bd8-b2ae-b310ad8b1d0a",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "264af9bf-1263-46a0-84b0-154e4c1d594a",
+                "name": "client_msg_id",
+                "value": "={{ $json.client_msg_id }}",
+                "type": "string"
+              },
+              {
+                "id": "552cf730-9d7a-4387-8643-a177d33bf394",
+                "name": "user",
+                "value": "={{ $json.user }}",
+                "type": "string"
+              },
+              {
+                "id": "b955e266-ba1e-4aa2-a5f7-9fc9849f7e65",
+                "name": "user_resolved",
+                "value": "={{ $json.user_resolved }}",
+                "type": "string"
+              },
+              {
+                "id": "32e18f3d-920b-404a-87d8-7b4a8f397c9e",
+                "name": "channel",
+                "value": "={{ $json.channel }}",
+                "type": "string"
+              },
+              {
+                "id": "c885fbdf-7128-4d9b-83dd-abccd34db841",
+                "name": "channel_resolved",
+                "value": "={{ $json.channel_resolved }}",
+                "type": "string"
+              },
+              {
+                "id": "d09c31f7-a4c7-4408-995f-bad666a98acc",
+                "name": "text",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              },
+              {
+                "id": "de2aa5b3-f711-479c-abed-313c0838d279",
+                "name": "blocks",
+                "value": "={{ $json.blocks }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          32,
+          0
+        ],
+        "id": "a82ffca0-1429-41b0-a76b-098ba494a5b2",
+        "name": "Fetch mention details"
+      },
+      {
+        "parameters": {
+          "resource": "channel",
+          "operation": "history",
+          "channelId": {
+            "__rl": true,
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Channel', ``, 'string') }}",
+            "mode": "id"
+          },
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "filters": {}
+        },
+        "type": "n8n-nodes-base.slackTool",
+        "typeVersion": 2.3,
+        "position": [
+          992,
+          320
+        ],
+        "id": "6328048d-a589-4ed4-bc35-baf4dfae89a5",
+        "name": "Get the history of a channel in Slack",
+        "webhookId": "b275fb28-8fd0-4117-b4ef-a388ab61d2ee",
+        "credentials": {
+          "slackApi": {
+            "id": "ALW1wxvPQTx7yW4c",
+            "name": "Binary Craft Technologies"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "resource": "reaction",
+          "channelId": {
+            "__rl": true,
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Channel', ``, 'string') }}",
+            "mode": "id"
+          },
+          "timestamp": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_Timestamp', ``, 'number') }}",
+          "name": "={{ $fromAI(\"emoji_code\") }}"
+        },
+        "type": "n8n-nodes-base.slackTool",
+        "typeVersion": 2.3,
+        "position": [
+          1120,
+          320
+        ],
+        "id": "c7cd3d22-42f6-4b8c-ada7-72c410dd3bc8",
+        "name": "Add a reaction in Slack",
+        "webhookId": "04ccee8f-e714-4ad3-b3cc-bea0836ff444",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "9LDQL7WKyYElLWZM",
+            "name": "Slack account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "e132287e-310f-4460-85b6-ae7f49a37718",
+                "name": "prompt",
+                "value": "=ALWAYS USE THE MESSAGE TOOLS TO REPLY OR SEND MESSAGE SINCE THEY ARE THE ONLY WAY TO REPLY. IF TOOLS FAIL TO RUN MAKE ADJUSTMENTS ACCORDING TO ERROR MESSAGE THEN TRY AGAIN\n\nYou got mentioned by {{ $json.user_resolved }} in the channel #{{ $json.channel_resolved }}. \nTheir current message is:\n\n{{ $json.text }}\n\nHere is some more info:\n- Recent messages : use the tool provided\n- blocks included in request: {{ $json.blocks.toJsonString() }}\n- User ID: {{ $json.user }}\n- Channel ID: {{ $json.channel }}\n- client message id: {{ $json.client_msg_id }}\n\nYour job is to respond in a way that is clear, helpful, and human-like. \nAsk clarifying questions if their message is vague. \nChallenge surface-level ideas with smart follow-ups.\nIf they present an idea, highlight trade-offs, suggest refinements, or provide next steps.\n\nRespond conversationally and in Slack style (brief, clear, slightly witty if appropriate). \nUse markdown formatting (`*bold*`, `> blockquotes`, lists) to improve readability.\n\nOnly reply to their **latest message**, but use the rest as context.\n",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          256,
+          0
+        ],
+        "id": "99ca5b98-faee-4382-99a8-bec685421321",
+        "name": "Prompt"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1,
+        "position": [
+          1248,
+          320
+        ],
+        "id": "d656d45d-3d9a-4fac-a745-f2947d6578dc",
+        "name": "Think"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          608,
+          320
+        ],
+        "id": "83ea4831-b92f-48da-9568-29f2c00b446c",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "f4948e2a-e763-48b6-8bc3-6c87e08b8957",
+                "leftValue": "={{ $json.bot_profile }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "94875948-7943-4e0a-ae25-0c8b6fa57bc9",
+                "leftValue": "={{ $json.bot_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "dd86a601-ecd4-46b1-98df-d35529135114",
+                "leftValue": "={{ $json.app_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -192,
+          192
+        ],
+        "id": "cd7e6c43-60ca-42b7-8c89-34c8d2193199",
+        "name": "Filter out bot messages"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "bd643590-fe39-41a9-8763-6705ddca08a9",
+                "name": "client_msg_id",
+                "value": "={{ $json.client_msg_id }}",
+                "type": "string"
+              },
+              {
+                "id": "a2d80aae-92e9-4a27-a3cb-e556da7c20ff",
+                "name": "text",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              },
+              {
+                "id": "9840fc0e-9bf0-45b0-94cb-79b5105881d3",
+                "name": "team",
+                "value": "={{ $json.team }}",
+                "type": "string"
+              },
+              {
+                "id": "4026e482-9274-43cd-ac72-d16a652b3894",
+                "name": "blocks",
+                "value": "={{ $json.blocks }}",
+                "type": "array"
+              },
+              {
+                "id": "d4fe0dc5-5d6d-4d42-be6f-251bbba3c401",
+                "name": "channel",
+                "value": "={{ $json.channel }}",
+                "type": "string"
+              },
+              {
+                "id": "091537e8-5b2d-400f-9ca1-4135c52ebead",
+                "name": "user_resolved",
+                "value": "={{ $json.user_resolved }}",
+                "type": "string"
+              },
+              {
+                "id": "15d00965-99f6-4423-a410-a2285efb1ab7",
+                "name": "channel_resolved",
+                "value": "={{ $json.channel_resolved }}",
+                "type": "string"
+              },
+              {
+                "id": "546cc3ce-f72b-4864-b5cb-24d2e34b4fd6",
+                "name": "user",
+                "value": "={{ $json.user }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          32,
+          192
+        ],
+        "id": "8b7dccfb-3334-4806-a6c1-51f328b91a06",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "e132287e-310f-4460-85b6-ae7f49a37718",
+                "name": "prompt",
+                "value": "=ALWAYS USE THE MESSAGE TOOLS TO REPLY OR SEND MESSAGE SINCE THEY ARE THE ONLY WAY TO REPLY. IF TOOLS FAIL TO RUN MAKE ADJUSTMENTS ACCORDING TO ERROR MESSAGE THEN TRY AGAIN\n\nThis is a new message by {{ $json.user_resolved }} in the channel #{{ $json.channel_resolved }}. This message might not be intended for you and it's not a must you relpy is there's no need.\n\nTheir current message is:\n\n{{ $json.text }}\n\nHere is some more info:\n- Recent messages : use the tool provided\n- blocks included in request: {{ $json.blocks.toJsonString() }}\n- User ID: {{ $json.user }}\n- Channel ID: {{ $json.channel }}\n- client message id: {{ $json.client_msg_id }}\n\nYour job is to respond in a way that is clear, helpful, and human-like. \nAsk clarifying questions if their message is vague. \nChallenge surface-level ideas with smart follow-ups.\nIf they present an idea, highlight trade-offs, suggest refinements, or provide next steps.\n\nRespond conversationally and in Slack style (brief, clear, slightly witty if appropriate). \nUse markdown formatting (`*bold*`, `> blockquotes`, lists) to improve readability.\n\nOnly reply to their **latest message**, but use the rest as context.\n",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          256,
+          192
+        ],
+        "id": "fc1325d7-e6ff-430a-9f58-00b71842a4d0",
+        "name": "Prompt1"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Channel', ``, 'string') }}",
+            "mode": "id"
+          },
+          "messageType": "block",
+          "blocksUi": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Blocks', ``, 'string') }}",
+          "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Notification_Text', ``, 'string') }}",
+          "otherOptions": {
+            "thread_ts": {
+              "replyValues": {
+                "thread_ts": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message_Timestamp_to_Reply_To', ``, 'number') }}",
+                "reply_broadcast": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reply_to_Thread', ``, 'boolean') }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.slackTool",
+        "typeVersion": 2.3,
+        "position": [
+          1376,
+          320
+        ],
+        "id": "b9e30065-7b34-44e2-a5c3-aee84925a6f1",
+        "name": "Send a reply message",
+        "webhookId": "3f83190d-5b1b-4ef5-8145-da2829b45300",
+        "credentials": {
+          "slackApi": {
+            "id": "ALW1wxvPQTx7yW4c",
+            "name": "Binary Craft Technologies"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Slack Trigger').item.json.channel }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          736,
+          320
+        ],
+        "id": "4621273a-6202-4892-9858-6f0136735cfc",
+        "name": "Simple Memory"
+      }
+    ],
+    "connections": {
+      "Slack Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a message in Slack": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Fetch mention details",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Filter out bot messages",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Fetch mention details": {
+        "main": [
+          [
+            {
+              "node": "Prompt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get the history of a channel in Slack": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Add a reaction in Slack": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prompt": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Filter out bot messages": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "Prompt1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prompt1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send a reply message": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "da893267-c04f-4662-a315-72778c6de9df",
   "connections": {
     "Slack Trigger": {
       "main": [

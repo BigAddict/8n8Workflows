@@ -1,7 +1,561 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-01T18:29:26.193Z",
+    "createdAt": "2026-01-01T18:29:26.193Z",
+    "versionId": "56ce53b7-d10a-4844-b2de-2ec8718e9e63",
+    "workflowId": "C87UfMQOJzpaceAT",
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.body.input }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "=> You are a legal assistant AI designed to help users understand legal information clearly and accurately. Your primary knowledge source is a collection of legal documents—such as the Kenyan Constitution, rental and housing laws, terms of service, privacy policies, and company policies—stored in a searchable vector database.\n> \n> A tool named `question_answer_tool` is available to you. **Call this tool automatically** when the user's question involves:\n> \n> - Legal rights, duties, obligations, or protections.\n>   \n> - Specific laws, policies, or regulations.\n>   \n> - References to documents (e.g. contracts, acts, terms).\n>   \n> \n> Use the tool to retrieve the most relevant sections from these documents. Construct your answer based only on what the tool returns. **If no relevant information is found**, respond politely to say so.\n> \n> You must:\n> \n> - Write clear, respectful, and concise responses in simple language.\n>   \n> - Provide legal context and explain terms as needed.\n>   \n> - Never make up information. Do not guess or assume facts not in the documents.\n>   \n> - Always respond in JSON with the following format:\n>   \n\n```json\n{\n  \"response\": \"Your full answer here, written in markdown if needed.\",\n  \"suggested_questions\": [\n    \"Follow-up question 1?\",\n    \"Follow-up question 2?\",\n    \"Follow-up question 3?\",\n    \"Follow-up question 4?\"\n  ]\n}\n```\n\n> No text or formatting outside of this JSON structure."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.9,
+        "position": [
+          -1440,
+          0
+        ],
+        "id": "915d7d5b-c7df-444e-9e86-5374f454e17d",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.5-flash-preview-04-17",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1560,
+          280
+        ],
+        "id": "8cc4a5df-8d7b-40ea-b1d5-a84ce2708b0d",
+        "name": "Gemini(Brain)",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "route"
+              },
+              {
+                "name": "data",
+                "type": "object"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1660,
+          1417.5
+        ],
+        "id": "875b337e-3cf5-4ec1-be1b-c1f95b3b797f",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.route }}",
+                      "rightValue": "query_archive",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "1617729a-7ff2-4bbd-acff-e08553177aba"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -1440,
+          1417.5
+        ],
+        "id": "31654b1c-0bf1-40c4-87c2-35a632fe5aee",
+        "name": "Route Manager"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.data.query }}",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chainRetrievalQa",
+        "typeVersion": 1.5,
+        "position": [
+          -1204,
+          1417.5
+        ],
+        "id": "3340fa32-b434-4623-8c61-35629e56ff9d",
+        "name": "Question and Answer Chain"
+      },
+      {
+        "parameters": {
+          "model": "deepseek/deepseek-chat-v3-0324:free",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          -1220,
+          1637.5
+        ],
+        "id": "49a23c08-4792-42ed-b73d-745326c3bed0",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "ezQM9X7CutaxDzrH",
+            "name": "OpenRouter account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "topK": 5
+        },
+        "type": "@n8n/n8n-nodes-langchain.retrieverVectorStore",
+        "typeVersion": 1,
+        "position": [
+          -1100,
+          1640
+        ],
+        "id": "d848d4dc-b7d6-43fd-b8ca-a1154f54df2a",
+        "name": "Vector Store Retriever"
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1012,
+          2032.5
+        ],
+        "id": "1a8000ce-99b9-4e03-b4d4-76e0b2883834",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "formTitle": "Upload Legal documents",
+          "formDescription": "Use this form to upload documents to Sheria Link",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Document to upload",
+                "fieldType": "file",
+                "acceptFileTypes": ".pdf",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {
+            "path": "sherialink-upload"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.2,
+        "position": [
+          -1660,
+          660
+        ],
+        "id": "093f2c6b-09fb-4c1d-a3a3-f245a22d8437",
+        "name": "On form submission",
+        "webhookId": "35e36637-b7f5-471a-9561-adab6975fb67",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": "sherialink",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.1,
+        "position": [
+          -1424,
+          460
+        ],
+        "id": "08bed9d6-55f6-4f9e-9f0c-317a2943c424",
+        "name": "Add to SheriaLink vector store",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Aiven Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "tableName": "sherialink",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.1,
+        "position": [
+          -1100,
+          1837.5
+        ],
+        "id": "aeedcca0-b0ae-424d-a7eb-f36bc6d61fab",
+        "name": "SheriaLink PGVector Store",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Aiven Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1440,
+          680
+        ],
+        "id": "88e08927-9808-4393-99b2-4763c2b28cd9",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          -1320,
+          682.5
+        ],
+        "id": "1ffa0710-e432-4a8a-8862-dabb004cd2d7",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          -1232,
+          880
+        ],
+        "id": "a2310787-b85f-4333-a25a-bda0b50951ad",
+        "name": "Character Text Splitter"
+      },
+      {
+        "parameters": {
+          "description": "Call this tool question_answer_tool when a user asks about information that may be found in uploaded legal documents, government policies, terms of service, privacy policies, or any structured legal content.",
+          "workflowId": {
+            "__rl": true,
+            "value": "={{ $workflow.id }}",
+            "mode": "id"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "route": "query_archive",
+              "data": "={\"query\": \"{{$fromAI('query')}}\"}"
+            },
+            "matchingColumns": [
+              "route"
+            ],
+            "schema": [
+              {
+                "id": "route",
+                "displayName": "route",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "data",
+                "displayName": "data",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "object",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.2,
+        "position": [
+          -1180,
+          240
+        ],
+        "id": "1eb4ec99-d722-4245-a0c1-278f9bcf42a6",
+        "name": "question_answer_tool"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "sherialink/chat",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -1700,
+          20
+        ],
+        "id": "c4b9b344-969a-473e-a11c-984865c28139",
+        "name": "Webhook",
+        "webhookId": "d7648044-1227-442b-8b68-8de7bc0c5285"
+      },
+      {
+        "parameters": {
+          "respondWith": "allIncomingItems",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.2,
+        "position": [
+          -1080,
+          0
+        ],
+        "id": "ac803dab-e24a-4ad5-9c4b-c7dc98dd85b4",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n  \"response\": \"Your full answer here, written in markdown.\",\n  \"suggested_questions\": [\n    \"Follow-up question 1?\",\n    \"Follow-up question 2?\",\n    \"Follow-up question 3?\",\n    \"Follow-up question 4?\"\n  ]\n}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          -980,
+          220
+        ],
+        "id": "4c97e544-8afc-4473-bd03-b491865c5f1b",
+        "name": "Structured Output Parser"
+      }
+    ],
+    "connections": {
+      "Gemini(Brain)": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Route Manager",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Route Manager": {
+        "main": [
+          [
+            {
+              "node": "Question and Answer Chain",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenRouter Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Question and Answer Chain",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Vector Store Retriever": {
+        "ai_retriever": [
+          [
+            {
+              "node": "Question and Answer Chain",
+              "type": "ai_retriever",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "SheriaLink PGVector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Add to SheriaLink vector store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SheriaLink PGVector Store": {
+        "ai_vectorStore": [
+          [
+            {
+              "node": "Vector Store Retriever",
+              "type": "ai_vectorStore",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Add to SheriaLink vector store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Add to SheriaLink vector store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "question_answer_tool": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "56ce53b7-d10a-4844-b2de-2ec8718e9e63",
   "connections": {
     "Gemini(Brain)": {
       "ai_languageModel": [
@@ -370,7 +924,8 @@
       ],
       "id": "093f2c6b-09fb-4c1d-a3a3-f245a22d8437",
       "name": "On form submission",
-      "webhookId": "35e36637-b7f5-471a-9561-adab6975fb67"
+      "webhookId": "35e36637-b7f5-471a-9561-adab6975fb67",
+      "disabled": true
     },
     {
       "parameters": {
@@ -579,7 +1134,7 @@
   ],
   "staticData": null,
   "tags": [],
-  "triggerCount": 2,
+  "triggerCount": 1,
   "updatedAt": "2025-05-26T20:29:30.000Z",
-  "versionId": "afd4ad5d-6927-42c1-9c20-b935b708cf56"
+  "versionId": "56ce53b7-d10a-4844-b2de-2ec8718e9e63"
 }

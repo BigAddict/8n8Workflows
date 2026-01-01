@@ -1,7 +1,758 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-01T18:29:26.180Z",
+    "createdAt": "2026-01-01T18:29:26.180Z",
+    "versionId": "690058aa-4b10-42bd-9a8e-7a2cdd74625b",
+    "workflowId": "Smcj80DNB2mvpuYS",
+    "nodes": [
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -360,
+          60
+        ],
+        "id": "254e37d9-149a-4dda-b741-57ce870b2833",
+        "name": "When chat message received",
+        "webhookId": "17628070-d1d2-4073-a4c4-578b784f0410",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "options": {
+            "systemMessage": "=**You are an intelligent task management agent integrated with Microsoft To Do. Your goal is to help the user manage their tasks efficiently and intelligently.**\n\n- You can create, update, retrieve, and delete tasks and task lists.\n  \n- Always confirm with the user if task descriptions are vague or missing deadlines.\n  \n- If the user wants to create a task, ask for: title, due date (if any), priority, and the list it belongs to.\n  \n- Suggest organizing tasks into lists based on context, like \"Work\", \"Personal\", \"Urgent\", etc.\n  \n- When updating or deleting tasks, confirm the task ID or title clearly.\n  \n- Provide helpful suggestions for breaking big tasks into smaller subtasks.\n  \n- Use simple, natural language responses unless the user explicitly asks for a structured format (like JSON).\n  \n\n**Keep in mind:**\n\n- Always maintain context of current task discussions using short-term memory.\n  \n- For long-term recurring tasks, suggest repetition settings (daily, weekly, custom).\n  \n- If no explicit instruction is given, politely ask clarifying questions before taking action.\n  \n\n**You are:**\n\n- Proactive, helpful, and concise.\n  \n- Forward-thinking and always aiming to make the user’s life easier.\n  \n- Friendly, but professional.\n\ntodays_time_and_date = {{ $now }}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.8,
+        "position": [
+          908,
+          -140
+        ],
+        "id": "eabe277a-3590-475c-80f0-12225d26d546",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolName": "long_term_memory",
+          "toolDescription": "Fetch previously saved memories here.",
+          "collectionName": "n8n_memories",
+          "topK": 5,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreZep",
+        "typeVersion": 1.1,
+        "position": [
+          100,
+          82.5
+        ],
+        "id": "bdcedb2a-604e-4332-826d-f9449f523d5e",
+        "name": "Zep Vector Store",
+        "credentials": {
+          "zepApi": {
+            "id": "3MUbd4byuGSkMc6j",
+            "name": "Zep Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          188,
+          280
+        ],
+        "id": "0612c52f-c9f1-4e9c-a8ac-8e68d694db93",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "list",
+          "operation": "create",
+          "displayName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('List_Name', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          396,
+          80
+        ],
+        "id": "dfc5aab7-880a-43de-b68f-c9c1b952df05",
+        "name": "Create list",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "list",
+          "operation": "delete",
+          "listId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('List_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          516,
+          80
+        ],
+        "id": "39a1f597-956c-410b-8780-5e250dc87bba",
+        "name": "Delete List",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "list",
+          "listId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('List_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          636,
+          80
+        ],
+        "id": "c311b7fb-cde4-4ca0-a65a-35ed75e12286",
+        "name": "List Get",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "list",
+          "operation": "getAll",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          756,
+          80
+        ],
+        "id": "60f13985-4dc2-49c4-9494-1a99d3ee212b",
+        "name": "Get all Lists",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "list",
+          "operation": "update",
+          "listId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('List_ID', ``, 'string') }}",
+          "displayName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('New_List_Name', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          876,
+          80
+        ],
+        "id": "70b36c6d-c63e-4cf8-9c22-47515dcb989d",
+        "name": "List update",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "taskListId": "={{ $fromAI(\"list_id\") }}",
+          "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+          "additionalFields": {
+            "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Content', ``, 'string') }}",
+            "dueDateTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Due', ``, 'string') }}",
+            "reminderDateTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Reminder', ``, 'string') }}"
+          }
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          996,
+          80
+        ],
+        "id": "1938204b-5ac5-4bb4-8079-9c6bbba7d646",
+        "name": "Create a task",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "taskListId": "={{ $fromAI('list_id') }}",
+          "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          1116,
+          80
+        ],
+        "id": "0082814e-4633-4bf0-b02a-9334348fa031",
+        "name": "Task Delete",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "taskListId": "={{ $fromAI('list_id') }}",
+          "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          1236,
+          80
+        ],
+        "id": "65ba3393-4ebf-4da6-a0c2-65fd167ba9c8",
+        "name": "Get task",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "taskListId": "={{ $fromAI('list_id') }}",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          1356,
+          80
+        ],
+        "id": "e4798a1d-ee17-424d-97c2-af74068ab971",
+        "name": "Get many tasks",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "taskListId": "={{ $fromAI('list_id') }}",
+          "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.microsoftToDoTool",
+        "typeVersion": 1,
+        "position": [
+          1476,
+          80
+        ],
+        "id": "ca34a606-9647-422c-8561-c796b4e0fd11",
+        "name": "Update a task",
+        "credentials": {
+          "microsoftToDoOAuth2Api": {
+            "id": "vNdol5z2uYQjjI1q",
+            "name": "Microsoft To Do account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "name": "save_to_long_term_memory",
+          "description": "Call this tool to save data and documents for storage to a long term memory.",
+          "workflowId": {
+            "__rl": true,
+            "value": "={{ $workflow.id }}",
+            "mode": "id"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "memory": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('memory', ``, 'string') }}"
+            },
+            "matchingColumns": [
+              "memory"
+            ],
+            "schema": [
+              {
+                "id": "memory",
+                "displayName": "memory",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.1,
+        "position": [
+          1596,
+          80
+        ],
+        "id": "dc0fae59-eac6-4b83-a16a-1cd28910dc4f",
+        "name": "Long term memory"
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "memory",
+                "type": "any"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -360,
+          720
+        ],
+        "id": "6c48ddad-011a-4d37-bf13-de7a8741cc4e",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "collectionName": "n8n_memories",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreZep",
+        "typeVersion": 1.1,
+        "position": [
+          -124,
+          720
+        ],
+        "id": "f11fcff1-555e-487f-b203-e99168a0b372",
+        "name": "Add data to vector store",
+        "credentials": {
+          "zepApi": {
+            "id": "3MUbd4byuGSkMc6j",
+            "name": "Zep Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -140,
+          940
+        ],
+        "id": "45a40302-1a28-4f98-946b-52638dbe3485",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          -20,
+          942.5
+        ],
+        "id": "9b5108a7-f374-4657-b8a2-d677d4cc4c1f",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          68,
+          1140
+        ],
+        "id": "60c0240d-2df4-4bf4-8b0a-11d1ae2ae6f6",
+        "name": "Recursive Character Text Splitter"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1,
+        "position": [
+          1716,
+          80
+        ],
+        "id": "a47fa03e-6b22-4857-8e49-0659dcad090b",
+        "name": "Think"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+        "typeVersion": 1,
+        "position": [
+          1836,
+          80
+        ],
+        "id": "b9c1aab2-ddcc-4a5e-891c-27ae40d58f87",
+        "name": "SerpAPI",
+        "credentials": {
+          "serpApi": {
+            "id": "Nb514TrEHwwIOJYy",
+            "name": "SerpAPI account"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolWikipedia",
+        "typeVersion": 1,
+        "position": [
+          1956,
+          80
+        ],
+        "id": "78d80730-2600-47a5-a956-ac52fa871173",
+        "name": "Wikipedia"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.0-flash",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -140,
+          80
+        ],
+        "id": "5bb86105-4dbc-41d4-9d64-b14a27389486",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          2100,
+          80
+        ],
+        "id": "2fa39ebb-b511-416a-aae2-39db108f2fa4",
+        "name": "Simple Memory"
+      }
+    ],
+    "connections": {
+      "When chat message received": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Zep Vector Store": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Zep Vector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create list": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Delete List": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "List Get": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get all Lists": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "List update": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create a task": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Task Delete": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get task": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many tasks": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update a task": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Long term memory": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Add data to vector store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Add data to vector store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Add data to vector store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "SerpAPI": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wikipedia": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "690058aa-4b10-42bd-9a8e-7a2cdd74625b",
   "connections": {
     "When chat message received": {
       "main": [
@@ -277,7 +1028,8 @@
       ],
       "id": "254e37d9-149a-4dda-b741-57ce870b2833",
       "name": "When chat message received",
-      "webhookId": "17628070-d1d2-4073-a4c4-578b784f0410"
+      "webhookId": "17628070-d1d2-4073-a4c4-578b784f0410",
+      "disabled": true
     },
     {
       "parameters": {
@@ -767,5 +1519,5 @@
   "tags": [],
   "triggerCount": 0,
   "updatedAt": "2025-04-29T11:56:33.000Z",
-  "versionId": "3a527e0c-ec6b-4d47-8daa-90358461caca"
+  "versionId": "690058aa-4b10-42bd-9a8e-7a2cdd74625b"
 }

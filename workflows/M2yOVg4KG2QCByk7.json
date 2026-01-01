@@ -1,7 +1,1001 @@
 {
-  "active": false,
-  "activeVersion": null,
-  "activeVersionId": null,
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-01T18:29:26.202Z",
+    "createdAt": "2026-01-01T18:29:26.202Z",
+    "versionId": "f42526f5-762a-4717-aecd-0d7fc140d60d",
+    "workflowId": "M2yOVg4KG2QCByk7",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "=wozapauto/ai",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -1856,
+          0
+        ],
+        "id": "fe570092-06c1-4c73-b6df-28e138a36870",
+        "name": "Webhook",
+        "webhookId": "d841108a-0b28-41d4-b07c-2ec845d5c3c2"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c735c214-6b57-48e4-a00c-a9b084e5b2cb",
+                "name": "event",
+                "value": "={{ $json.body.event }}",
+                "type": "string"
+              },
+              {
+                "id": "f2b46972-9c8f-496b-96cb-0639e427bae1",
+                "name": "instance",
+                "value": "={{ $json.body.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "cd7958c2-6cdf-4d27-9bc0-00b17bfc50dd",
+                "name": "fromMe",
+                "value": "={{ $json.body.data.key.fromMe }}",
+                "type": "boolean"
+              },
+              {
+                "id": "0db01fcf-026a-494c-b1f2-d319a7aa8455",
+                "name": "message",
+                "value": "={{ $json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "61265ac3-c8af-45ef-9f58-2686d4a4107f",
+                "name": "timestamp",
+                "value": "={{ $json.body.data.message.messageContextInfo.deviceListMetadata.recipientTimestamp }}",
+                "type": "number"
+              },
+              {
+                "id": "d5bcefcd-ae2d-4713-8c69-4e43b9f40be5",
+                "name": "messageType",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              },
+              {
+                "id": "a5eeb838-8202-4627-be61-8bae85cffd8f",
+                "name": "sender",
+                "value": "={{ $json.body.sender }}",
+                "type": "string"
+              },
+              {
+                "id": "061f543d-2686-4aaa-91c1-de415ed0f500",
+                "name": "pushName",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "d9a3940c-fa52-4e7a-97c3-b79066e86ea9",
+                "name": "remoteJid",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -960,
+          0
+        ],
+        "id": "1adfcb09-8e39-40cf-975f-7e22a4917cf6",
+        "name": "Edit Fields"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.message }}",
+          "options": {
+            "systemMessage": "=SYSTEM ROLE:\nYou are a professional WhatsApp Auto-Reply Assistant for WOZAP AUTO 24/7.\nYour job is to:\n1. Answer customer questions using the knowledge base provided.\n2. Keep replies short, clear, and professional (2–4 sentences).\n3. Use a friendly Kenyan-English tone with light emojis where natural.\n4. If the query is complex or outside the Knowledge Base, politely escalate to a human Whatsapp number +254722899646\n\n---\n\nKnowledge Base\n\nBusiness Overview\n- Company Name: Wozap Auto 24/7\n- Location: Nairobi, Kenya\n- Business Hours: Always open (24/7 support via AI assistant; human follow-up during working hours 8.00am - 18.00PM) Mon-Saturday\n- Tone/Voice: Professional, consultative, approachable with Kenyan English touch (e.g., “Sawa, let me explain…”).\n\nOther Products & Services\n- WhatsApp Auto-Reply System → AI-powered auto-responder for businesses.\n- Bring Me Leads App → Safe first-contact email outreach.\n- SMS Finance Tracker → Organizes SMS notifications from M-Pesa & banks.\n- AskieGPT (Kids AI App) → Safe AI tutor for kids (6–12 yrs).\n- Prompt-Slide-Presentation-Maker → AI-powered presentation builder.\n- Quote Maker App\n- Social Media post creator and Scheduler\n- Will Making App → Tool for creating legally valid wills.\n\nFAQs\nQ: What does your WhatsApp Auto-Reply system do?\nA: It automates replies to customer queries, reduces workload, and improves response time.\n\nQ: How much does it cost?\nA: Subscriptions start from KES [5,000] per month, depending on features.\n\nQ: Can it integrate with M-Pesa?\nA: Yes, for payment confirmations, order checks, and receipts.\n\nQ: Who can use your solutions?\nA: Any SME — retail, education, fintech, agencies, and service providers.\n\nQ: How do I get started?\nA: Share your Knowledge Base with us, we configure your WhatsApp number, and you’re live in 4 hours.\n\nCustomer Journey Flow\n1. Customer messages → Auto-reply introduces services.\n2. Customer asks questions → Assistant responds from KB.\n3. Customer requests setup → Share onboarding link or escalate.\n4. Complex issues → Escalate to human. (Whatsapp +254722899646)\n\nTone & Instructions\n- Greet warmly: “Hello, thank you for reaching out to Wozap Auto 24/7. How can I help you today?”\n- Be short, precise, and professional.\n- Preferred phrases: “Sawa, let me explain…”, “Here’s the best option…”\n- Avoid: cheap, maybe, complicated → use affordable, flexible, straightforward.\n- Incase of Complex issues, bargaining → Escalate to human. (Whatsapp +254722899646) do not leave any issue hanging by saying (Let me check and get back to you)\n- Emojis → ✅📊📱 (very light, not excessive).\n\nSeller Psychology & Buyer Confidence (Use these to keep prospect engage and also hint to them that they too will have the benefits if they take the system)\n- Auto-reply reduces seller anxiety caused by customers who ask too many questions → prevents irritability, mood swings, and dismissive replies.\n- AI ensures calm, consistent, and professional answers, protecting the seller’s mental focus.\n- Professional auto-replies build buyer confidence by showing reliability, stability, and customer-first attitude.\n\nBest Practices\n- Update Knowledge Base regularly with new apps, services, and pricing.\n- Include a “talk to human” option for escalation.\n- Track unanswered queries and feed them back into the KB.\n\nWhatsApp allows you to format text inside your messages. \nItalic\nTo italicize your message, place an underscore on both sides of the text:\n_text_\nBold\nTo bold your message, place an asterisk on both sides of the text:\n*text*\nStrikethrough\nTo strikethrough your message, place a tilde on both sides of the text:\n~text~\nMonospace\nTo monospace your message, place three backticks on both sides of the text:\n```text```\nBulleted list\nTo add a bulleted list to your message, place an asterisk or hyphen and a space before each word or sentence:\n* text\n* text\nOr\n- text\n- text\nNumbered list\nTo add a numbered list to your message, place a number, period, and space before each line of text:\n1. text\n2. text\nQuote\nTo add a quote to your message, place an angle bracket and space before the text:\n> text\nInline code\nTo add inline code to your message, place a backtick on both sides of the message:\n`text`"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 2.2,
+        "position": [
+          -432,
+          0
+        ],
+        "id": "52764677-7afd-4e0a-aa60-6e7ac1351c8d",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -736,
+          224
+        ],
+        "id": "b73a1e39-0824-4a8e-86e3-8f9e3501374b",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "={{ $json.instance }}",
+          "remoteJid": "={{ $json.remoteJid }}",
+          "messageText": "={{ $json.response }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api-en.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          624,
+          0
+        ],
+        "id": "90d73788-b705-47c8-a4c6-9df1565c3307",
+        "name": "Send text",
+        "credentials": {
+          "evolutionApi": {
+            "id": "u4tiYQyo3g8JFP50",
+            "name": "EarlyKey"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "5fb77df8-95d5-4c80-a343-4f36a4917ea1",
+                "name": "response",
+                "value": "={{ $json.output }}",
+                "type": "string"
+              },
+              {
+                "id": "5fcc8b06-058e-4bdb-9d9f-569bb934f5db",
+                "name": "instance",
+                "value": "={{ $('Edit Fields').item.json.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "50701965-bdf0-435d-ad55-b261bdc80d6e",
+                "name": "remoteJid",
+                "value": "={{ $('Webhook').item.json.body.data.key.remoteJid.split(\"@\")[0] }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          400,
+          0
+        ],
+        "id": "d60a8ba4-7b47-40e3-a057-3942982e1970",
+        "name": "Edit Fields1"
+      },
+      {
+        "parameters": {
+          "formTitle": "Update",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "Document to upload.",
+                "fieldType": "file",
+                "multipleFiles": false,
+                "acceptFileTypes": ".pdf",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {
+            "path": "wozapauto/knowledge"
+          }
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.3,
+        "position": [
+          -1856,
+          768
+        ],
+        "id": "87aba9a4-9c40-49cb-9207-1e90c0f04c07",
+        "name": "On form submission",
+        "webhookId": "b7b9ae6d-15a5-465e-89d7-15d8d2d4c0ad",
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "binaryPropertyName": "Document_to_upload_",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          -1632,
+          768
+        ],
+        "id": "d6b0b1bd-928a-4ea6-80a6-7c5ef09be089",
+        "name": "Extract from File"
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": "wozapauto",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.3,
+        "position": [
+          -1408,
+          768
+        ],
+        "id": "ca6db4d8-4c13-49ce-b977-e5ee5d4fcdd1",
+        "name": "Postgres PGVector Store",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -1408,
+          992
+        ],
+        "id": "3523e0fb-749c-4960-8a1f-7689efb7334b",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1.1,
+        "position": [
+          -1280,
+          992
+        ],
+        "id": "c636ba5d-118e-43f7-a04d-49ce4fe4b67d",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          112,
+          432
+        ],
+        "id": "cf90cbd2-98af-405f-a00b-43fc15ad129b",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "ZBtkKEVmgRcWvWO5",
+            "name": "Google Gemini(PaLM) Api account 3"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolThink",
+        "typeVersion": 1.1,
+        "position": [
+          -480,
+          224
+        ],
+        "id": "01fb64e1-af20-4bee-b111-13c7cd942594",
+        "name": "Think"
+      },
+      {
+        "parameters": {
+          "operation": "getTimeBetweenDates",
+          "startDate": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start_Date', ``, 'string') }}",
+          "endDate": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End_Date', ``, 'string') }}",
+          "units": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Units', ``, 'string') }}",
+          "outputFieldName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_Field_Name', ``, 'string') }}",
+          "options": {
+            "isoString": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_as_ISO_String', ``, 'boolean') }}"
+          }
+        },
+        "type": "n8n-nodes-base.dateTimeTool",
+        "typeVersion": 2,
+        "position": [
+          -352,
+          224
+        ],
+        "id": "a6caff17-7c47-4db8-84d5-e00dfa9d365a",
+        "name": "Get time between Dates"
+      },
+      {
+        "parameters": {
+          "includeTime": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Include_Current_Time', ``, 'boolean') }}",
+          "outputFieldName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Output_Field_Name', ``, 'string') }}",
+          "options": {
+            "timezone": "Africa/Nairobi"
+          }
+        },
+        "type": "n8n-nodes-base.dateTimeTool",
+        "typeVersion": 2,
+        "position": [
+          -224,
+          224
+        ],
+        "id": "65a41d63-4eb5-4cfb-a892-cc1c4903cbb4",
+        "name": "Get current date"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "={{ $json.data.instance }}",
+          "remoteJid": "={{ $json.data.recipient_number }}",
+          "messageText": "={{ $json.message }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api-en.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -1408,
+          432
+        ],
+        "id": "9682016e-066e-4cbf-b77d-871ca0aed049",
+        "name": "Send dispatch sales",
+        "credentials": {
+          "evolutionApi": {
+            "id": "u4tiYQyo3g8JFP50",
+            "name": "EarlyKey"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "route"
+              },
+              {
+                "name": "data",
+                "type": "object"
+              },
+              {
+                "name": "message"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1856,
+          432
+        ],
+        "id": "29ddccb4-6cc6-4fbc-a60c-d96c447f17a0",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.route }}",
+                      "rightValue": "dispatch_sales",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "84f48cca-ce83-4742-99df-c712e52cbb04"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "to_sales"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.3,
+        "position": [
+          -1632,
+          432
+        ],
+        "id": "53993d16-88bd-4aca-8db4-19ca8cca2998",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "description": "Call this tool to send a whatsapp message to the sales team",
+          "workflowId": {
+            "__rl": true,
+            "value": "={{ $workflow.id }}",
+            "mode": "id",
+            "cachedResultUrl": "/workflow/=%7B%7B%20$workflow.id%20%7D%7D"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "route": "dispatch_sales",
+              "data": "={\n  \"instance\": \"{{ $json.instance }}\",\n  \"recipient_number\": \"254722899646\",\n}\n",
+              "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('message', ``, 'string') }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "route",
+                "displayName": "route",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "data",
+                "displayName": "data",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "object",
+                "removed": false
+              },
+              {
+                "id": "message",
+                "displayName": "message",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.2,
+        "position": [
+          -96,
+          224
+        ],
+        "id": "16ef7de2-73a8-46ae-8a60-d0eadfe1b13f",
+        "name": "Dispatch to sales team"
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Work with wozapauto knowledge base.",
+          "tableName": "wozapauto",
+          "topK": 8,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1.3,
+        "position": [
+          32,
+          224
+        ],
+        "id": "85e3d35f-1f98-4408-8c64-7fe1bcf07242",
+        "name": "wozapauto knowledge base",
+        "credentials": {
+          "postgres": {
+            "id": "AEzErPKvBs7vtBPl",
+            "name": "Taskacer Postgres"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $json.remoteJid }}x{{ $json.sender }}",
+          "tableName": "wozapauto_chats"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+        "typeVersion": 1.3,
+        "position": [
+          -608,
+          224
+        ],
+        "id": "c5be4d87-6c96-43bc-a604-7d0230410540",
+        "name": "Postgres Chat Memory",
+        "credentials": {
+          "postgres": {
+            "id": "STEiiGYKeUTcdagW",
+            "name": "AIVEN pain2profit"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "c729c23e-da4e-4272-9027-7c2e564340fc",
+                "name": "event",
+                "value": "={{ $json.body.event }}",
+                "type": "string"
+              },
+              {
+                "id": "723726e9-91c6-4a3f-8316-ea1e559610e8",
+                "name": "instance",
+                "value": "={{ $json.body.instance }}",
+                "type": "string"
+              },
+              {
+                "id": "bf033b9f-d436-482d-89e3-dcee562e1c5a",
+                "name": "remoteJid",
+                "value": "={{ $json.body.data.key.remoteJid }}",
+                "type": "string"
+              },
+              {
+                "id": "241c0acc-ab02-4d2e-91a9-7226dd4e2020",
+                "name": "fromMe",
+                "value": "={{ $json.body.data.key.fromMe }}",
+                "type": "boolean"
+              },
+              {
+                "id": "42d65d9e-e515-4f0a-8c03-c9c6d7ba13c8",
+                "name": "pushName",
+                "value": "={{ $json.body.data.pushName }}",
+                "type": "string"
+              },
+              {
+                "id": "0be77a10-2f1d-4632-a9ac-dfee1225a825",
+                "name": "status",
+                "value": "={{ $json.body.data.status }}",
+                "type": "string"
+              },
+              {
+                "id": "99fb7749-92a8-4c7f-9780-5fe64d0d217d",
+                "name": "conversation",
+                "value": "={{ $json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "af143409-36ad-42ae-9604-b08b94b04535",
+                "name": "messageType",
+                "value": "={{ $json.body.data.messageType }}",
+                "type": "string"
+              },
+              {
+                "id": "1742feca-0f20-4677-a3c6-c2c733073b8c",
+                "name": "instanceId",
+                "value": "={{ $json.body.data.instanceId }}",
+                "type": "string"
+              },
+              {
+                "id": "6a4b5a5c-d9e4-43e9-a63d-e10e5f01dddc",
+                "name": "date_time",
+                "value": "={{ $json.body.date_time }}",
+                "type": "string"
+              },
+              {
+                "id": "2be9a883-412d-42d6-9a4b-ebc2268083b2",
+                "name": "sender",
+                "value": "={{ $json.body.sender }}",
+                "type": "string"
+              },
+              {
+                "id": "80c58eaf-2e14-4df4-8ba1-12ab4baaf74c",
+                "name": "quotedMessage",
+                "value": "={{ $json.body.data?.contextInfo.quotedMessage }}",
+                "type": "object"
+              },
+              {
+                "id": "61c5bd4b-60f6-407f-b304-2b85510b8571",
+                "name": "is_group",
+                "value": "={{ $if($json.body.data.message?.senderKeyDistributionMessage.groupId, true, false) }}",
+                "type": "boolean"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1632,
+          0
+        ],
+        "id": "ccc6965b-59b8-49ac-9d17-a999c439a09a",
+        "name": "Extract data from webhook"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "7b0a2893-2ac1-4427-9a32-c7dfb58be0b8",
+                "leftValue": "={{ $json.is_group }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -1408,
+          0
+        ],
+        "id": "3c9b5567-84dc-4adc-8349-d2b941bb9361",
+        "name": "Check if group"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "7ad51667-8677-4bf6-99ce-78e2254f352b",
+                "leftValue": "={{ $json.fromMe }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -1184,
+          0
+        ],
+        "id": "1ecefbd5-f756-41b1-bedb-81d89ed6694e",
+        "name": "Check if message from host number"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "={{ $json.body.instance_name }}",
+          "remoteJid": "={{ $json.body.phone_number.replace('+', '') }}",
+          "messageText": "This is a test message please",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api-en.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          0,
+          688
+        ],
+        "id": "799536f5-6ec0-43db-be97-bd3e309b8a7a",
+        "name": "Send Test Message",
+        "credentials": {
+          "evolutionApi": {
+            "id": "u4tiYQyo3g8JFP50",
+            "name": "EarlyKey"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "wozapauto/test-message",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -272,
+          688
+        ],
+        "id": "cf098316-7731-40ac-af03-b3539e94d638",
+        "name": "Webhook1",
+        "webhookId": "ff3eb8bc-da34-4b53-9fb6-2af92c06973b"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Extract data from webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Edit Fields1": {
+        "main": [
+          [
+            {
+              "node": "Send text",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "wozapauto knowledge base",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Think": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get time between Dates": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get current date": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Send dispatch sales",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Dispatch to sales team": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "wozapauto knowledge base": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract data from webhook": {
+        "main": [
+          [
+            {
+              "node": "Check if group",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check if group": {
+        "main": [
+          [
+            {
+              "node": "Check if message from host number",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check if message from host number": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook1": {
+        "main": [
+          [
+            {
+              "node": "Send Test Message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null,
+    "autosaved": false
+  },
+  "activeVersionId": "f42526f5-762a-4717-aecd-0d7fc140d60d",
   "connections": {
     "Webhook": {
       "main": [
@@ -461,7 +1455,8 @@
       ],
       "id": "87aba9a4-9c40-49cb-9207-1e90c0f04c07",
       "name": "On form submission",
-      "webhookId": "b7b9ae6d-15a5-465e-89d7-15d8d2d4c0ad"
+      "webhookId": "b7b9ae6d-15a5-465e-89d7-15d8d2d4c0ad",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1425,5 +2420,5 @@
   "tags": [],
   "triggerCount": 2,
   "updatedAt": "2025-10-03T16:29:45.000Z",
-  "versionId": "2e1a7fa8-4869-494a-8ffd-3c4caf070d10"
+  "versionId": "f42526f5-762a-4717-aecd-0d7fc140d60d"
 }

@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-06T13:55:10.000Z",
-    "createdAt": "2026-01-06T13:50:01.029Z",
-    "versionId": "40176b45-6a06-4525-9b0e-3523ea0f2f4f",
+    "updatedAt": "2026-01-09T14:47:33.000Z",
+    "createdAt": "2026-01-09T14:47:28.061Z",
+    "versionId": "8b3ae92e-11a1-4d6f-a655-d9481244194d",
     "workflowId": "F3z8IFoyvHtctIg0",
     "nodes": [
       {
@@ -147,7 +147,7 @@
             "interval": [
               {
                 "field": "hours",
-                "hoursInterval": 2
+                "hoursInterval": 12
               }
             ]
           }
@@ -1208,11 +1208,11 @@
       }
     },
     "authors": "David Njihia",
-    "name": "Version 40176b45",
+    "name": "Version 8b3ae92e",
     "description": "",
     "autosaved": false
   },
-  "activeVersionId": "40176b45-6a06-4525-9b0e-3523ea0f2f4f",
+  "activeVersionId": "8b3ae92e-11a1-4d6f-a655-d9481244194d",
   "connections": {
     "LinkedIn": {
       "main": [
@@ -1656,7 +1656,7 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 2
+              "hoursInterval": 12
             }
           ]
         }
@@ -2438,17 +2438,17 @@
   "staticData": {
     "node:Schedule Trigger": {
       "recurrenceRules": [
-        12
+        16
       ]
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        10
+        22
       ]
     }
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2026-01-06T13:50:01.022Z",
-  "versionId": "40176b45-6a06-4525-9b0e-3523ea0f2f4f"
+  "updatedAt": "2026-01-09T14:47:28.056Z",
+  "versionId": "8b3ae92e-11a1-4d6f-a655-d9481244194d"
 }

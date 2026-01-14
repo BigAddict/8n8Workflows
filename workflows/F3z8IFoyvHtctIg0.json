@@ -1672,6 +1672,7 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -2464,12 +2465,12 @@
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        22
+        10
       ]
     }
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2026-01-10T07:07:01.806Z",
-  "versionId": "b27ec380-8314-44ef-837a-65e07552d029"
+  "updatedAt": "2026-01-13T21:31:32.340Z",
+  "versionId": "3dbd7ab3-6d8a-4c5b-9927-800844bfce57"
 }

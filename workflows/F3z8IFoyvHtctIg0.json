@@ -1656,7 +1656,7 @@
           "interval": [
             {
               "field": "hours",
-              "hoursInterval": 12
+              "hoursInterval": 3
             }
           ]
         }
@@ -2465,12 +2465,12 @@
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        10
+        22
       ]
     }
   },
   "tags": [],
   "triggerCount": 2,
-  "updatedAt": "2026-01-13T21:31:32.340Z",
-  "versionId": "3dbd7ab3-6d8a-4c5b-9927-800844bfce57"
+  "updatedAt": "2026-01-19T19:09:33.622Z",
+  "versionId": "85d5f3ab-455d-4cbe-a116-d0c574f00dbb"
 }

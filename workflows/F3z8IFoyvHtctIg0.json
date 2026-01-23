@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-01-09T14:47:33.000Z",
-    "createdAt": "2026-01-09T14:47:28.061Z",
-    "versionId": "8b3ae92e-11a1-4d6f-a655-d9481244194d",
+    "updatedAt": "2026-01-23T12:24:42.000Z",
+    "createdAt": "2026-01-23T12:23:30.029Z",
+    "versionId": "9cfa7763-7733-427e-8366-d30726540998",
     "workflowId": "F3z8IFoyvHtctIg0",
     "nodes": [
       {
@@ -147,7 +147,7 @@
             "interval": [
               {
                 "field": "hours",
-                "hoursInterval": 12
+                "hoursInterval": 3
               }
             ]
           }
@@ -163,6 +163,7 @@
       },
       {
         "parameters": {
+          "modelName": "models/gemini-2.0-flash",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -183,12 +184,12 @@
       {
         "parameters": {
           "promptType": "define",
-          "text": "=<title>\n{{ $('Filter Unposted Items').item.json.title }}\n</title>\n\n<Detail>\n{{ $('Visit GH Page').item.json.data }}\n</Detail>\n\n<Repository Link>\n{{ $('Filter Unposted Items').item.json.url }}\n</Repository Link>\n\n<Response>\n{   \n  \"linkedin\": \"Your LinkedIn post here\",\n  \"image_json_prompt\": \"An image prompt for the post in json format for precise and clear details\"\n}\n</Response>",
+          "text": "=<title>\n{{ $('Filter Unposted Items').item.json.title }}\n</title>\n\n<Detail>\n{{ $('Visit GH Page').item.json.data }}\n</Detail>\n\n<Repository Link>\n{{ $('Filter Unposted Items').item.json.url }}\n</Repository Link>\n\n<Response>\n{\n  \"linkedin\": \"Plain text LinkedIn post written in paragraphs only, with hashtags at the end\",\n  \"image_json_prompt\": \"A concise, professional image prompt describing visuals, style, mood, and key elements\"\n}\n</Response>",
           "hasOutputParser": true,
           "messages": {
             "messageValues": [
               {
-                "message": "=OBJECTIVE\nGenerate engaging, professional, and informative LinkedIn posts that effectively communicate the value of a project, initiative, or idea while maintaining a neutral, narrative-driven tone. The posts should include real-world use case examples to illustrate the project's practical applications. The post should also include the project link.\n\nCONTEXT\nThis assistant is designed exclusively for LinkedIn content generation. The output should align with LinkedIn’s professional audience, focusing on thought leadership, industry insights, and problem-solving narratives. Posts should provide meaningful context, articulate the core benefits, and include relevant hashtags to improve discoverability.\n\nAudience: Professionals, industry leaders, decision-makers, and knowledge seekers.\nTone: Engaging, insightful, and neutral (avoiding personal involvement).\nStructure:\n\nIntroduction – Captures attention with a compelling hook.\nContext & Problem Statement – Defines the challenge or gap.\nSolution & Features – Highlights how the project addresses the issue.\nUse Case Examples – Showcases real-world applications and scenarios where the project provides value.\nImpact & Benefits – Explains the value to different audiences.\nCall to Action (CTA) – Encourages engagement (e.g., \"Learn more here\").\nINSTRUCTIONS\n\nUse a narrative-driven approach that avoids direct personal involvement.\nEnsure clarity and depth by expanding on the project’s key features, real-world use cases, and industry relevance.\nInclude at least two practical use case examples to demonstrate the project's real-world applications.\nIncorporate a clear CTA at the end to encourage engagement (e.g., “Explore the details here”).\nStrictly adhere to LinkedIn’s 3,000-character limit while ensuring conciseness and readability.\nUse only relevant hashtags (e.g., #AI #SoftwareDevelopment #DataScience) to enhance visibility without overloading the post.\nAvoid emojis to maintain a professional tone.\nOutput should be in JSON format for structured integration."
+                "message": "=OBJECTIVE\nGenerate engaging, professional, and informative LinkedIn posts that communicate the value of a project, initiative, or idea in a natural, human-written style. The post must include the project link and real-world use case examples.\n\nCONTEXT\nThis assistant is designed exclusively for LinkedIn content generation. The writing must resemble organic LinkedIn posts written manually by professionals, not structured or formatted content. The goal is to share industry insights and project value in a narrative, paragraph-based style.\n\nAudience: Professionals, industry leaders, decision-makers, and knowledge seekers.\nTone: Engaging, insightful, neutral, and professional. Avoid personal involvement or first-person language.\n\nCRITICAL FORMATTING RULES (STRICT)\n- Do NOT use Markdown or Markdown-like formatting.\n- Do NOT use headings, bullet points, numbered lists, separators, or section labels.\n- Do NOT use bold, italics, symbols, or special formatting characters.\n- Write only in plain text paragraphs.\n- Paragraphs must flow naturally and vary in length.\n- Avoid repetitive phrasing or visible templates.\n- The post must visually resemble a human-written LinkedIn post.\n\nCONTENT FLOW (IMPLICIT)\nThe post should naturally progress through an opening hook, relevant context, explanation of the project, at least two real-world use case examples, practical impact, and a clear call to action at the end. Do not explicitly label or separate these sections.\n\nHASHTAGS\nInclude a small number of relevant, professional hashtags at the very end of the LinkedIn post on a single line.\n\nCONSTRAINTS\n- Maximum length: 3,000 characters\n- No emojis\n- No hype, exaggerated claims, or speculative claims\n- Content must be grounded in the provided source\n\nOUTPUT FORMAT (STRICT – DO NOT CHANGE)\nReturn output strictly as JSON using exactly this structure:\n\n{\n  \"linkedin\": \"Plain text LinkedIn post written in paragraphs only, with hashtags at the end\",\n  \"image_json_prompt\": \"A concise, professional image prompt describing visuals, style, mood, and key elements\"\n}\n"
               }
             ]
           }
@@ -204,7 +205,7 @@
       },
       {
         "parameters": {
-          "jsonSchemaExample": "{   \n  \"linkedin\": \"Your LinkedIn post here\",\n  \"image_json_prompt\": \"An image prompt for the post in json format for precise and clear details\"\n}"
+          "jsonSchemaExample": "{\n  \"linkedin\": \"Plain text LinkedIn post written in paragraphs only, with hashtags at the end\",\n  \"image_json_prompt\": \"A concise, professional image prompt describing visuals, style, mood, and key elements\"\n}"
         },
         "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
         "typeVersion": 1.2,
@@ -234,7 +235,8 @@
           624
         ],
         "id": "52bd8c9e-3b0f-4ac3-9584-2cdff432cd9f",
-        "name": "Check for unposted posts"
+        "name": "Check for unposted posts",
+        "disabled": true
       },
       {
         "parameters": {
@@ -1208,11 +1210,11 @@
       }
     },
     "authors": "David Njihia",
-    "name": "Version 8b3ae92e",
+    "name": "Version 9cfa7763",
     "description": "",
-    "autosaved": false
+    "autosaved": true
   },
-  "activeVersionId": "8b3ae92e-11a1-4d6f-a655-d9481244194d",
+  "activeVersionId": "9cfa7763-7733-427e-8366-d30726540998",
   "connections": {
     "LinkedIn": {
       "main": [
@@ -1672,6 +1674,7 @@
     },
     {
       "parameters": {
+        "modelName": "models/gemini-2.0-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1743,7 +1746,8 @@
         624
       ],
       "id": "52bd8c9e-3b0f-4ac3-9584-2cdff432cd9f",
-      "name": "Check for unposted posts"
+      "name": "Check for unposted posts",
+      "disabled": true
     },
     {
       "parameters": {
@@ -2464,12 +2468,12 @@
     },
     "node:Check for unposted posts": {
       "recurrenceRules": [
-        10
+        14
       ]
     }
   },
   "tags": [],
-  "triggerCount": 2,
-  "updatedAt": "2026-01-20T20:54:36.288Z",
-  "versionId": "b0ac6d1e-2127-44b4-a278-e4de4ed6afd2"
+  "triggerCount": 1,
+  "updatedAt": "2026-01-23T12:23:30.027Z",
+  "versionId": "9cfa7763-7733-427e-8366-d30726540998"
 }
